@@ -3,15 +3,14 @@
 
 #include <QPushButton>
 
-
-enum mswprBtn_state {
-    empty,
-    _1, _2, _3, _4, _5, _6, _7, _8,
-    bomb
-};
-
-class MswprButton : QPushButton {
+class MswprButton : public QPushButton {
 public:
+    enum mswprBtn_state {
+        empty,
+        _1, _2, _3, _4, _5, _6, _7, _8,
+        bomb
+    };
+
     MswprButton(QWidget* parent, int _x_id, int _y_id, bool is_bomb = false);
     void setState(mswprBtn_state _stt);
     mswprBtn_state getState();

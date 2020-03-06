@@ -5,18 +5,19 @@
 
 #include <QWidget>
 
-class Minesweeper : QWidget{
-
+class Minesweeper : public QWidget{
+    Q_OBJECT
 public:
     Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_count);
+private slots:
+    void fieldClicked();
 private:
     int x;
     int y;
     int bombs_left;
-    QVector<QVector<MswprButton>> board;
+    QList<QList<MswprButton*>> board;
     bool isWon();
-private slots:
-    void fieldClicked();
+
 
 };
 

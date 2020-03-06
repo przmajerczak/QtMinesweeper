@@ -8,6 +8,9 @@
 
 #include <QRandomGenerator>
 #include <QDebug>
+
+#include <mswprbutton.h>
+#include "minesweeper.h"
 int main(int argc, char *argv[])
 {
     /*QApplication a(argc, argv);
@@ -32,5 +35,15 @@ int main(int argc, char *argv[])
     qDebug() << QRandomGenerator::system()->bounded(0, 20);
 
 
-    return 0;
+
+
+            QApplication a(argc, argv);
+                MainWindow w;
+
+                MswprButton b(&w, 9,9, false);
+                b.setText("hue");
+                Minesweeper m(&w, 5, 4, 2);
+                w.show();
+                return a.exec();
+    //return 0;
 }
