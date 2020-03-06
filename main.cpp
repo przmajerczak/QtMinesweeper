@@ -6,12 +6,14 @@
 #include <QJsonObject>
 #include <iostream>
 
+#include <QRandomGenerator>
+#include <QDebug>
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    /*QApplication a(argc, argv);
     MainWindow w;
     w.show();
-    return a.exec();/*
+    return a.exec();
 
     QJsonObject json_obj;
     json_obj["margin"] = 10;
@@ -26,4 +28,9 @@ int main(int argc, char *argv[])
     jsonfile.close();
 
     return 0;*/
+    for (int i = 0; i < 10; ++i)
+    qDebug() << QRandomGenerator::system()->bounded(0, 20);
+
+
+    return 0;
 }
