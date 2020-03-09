@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QMenuBar>
+#include <QPushButton>
+#include <QLayout>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -16,7 +18,10 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    QBoxLayout* main_layout;
 private:
     QMenuBar* menuBar;
+
+    QWidget* main_widget;
 };
 #endif // MAINWINDOW_H

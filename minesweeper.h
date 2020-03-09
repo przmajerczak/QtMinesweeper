@@ -3,7 +3,8 @@
 
 #include "mswprbutton.h"
 
-#include <QWidget>
+#include <QFrame>
+#include <QGridLayout>
 
 class Minesweeper : public QWidget{
     Q_OBJECT
@@ -15,8 +16,15 @@ private:
     int x;
     int y;
     int bombs_left;
-    QList<QList<MswprButton*>> board;
+    int button_size;
+    QVector<QVector<QSharedPointer<MswprButton>>> board;
+    QGridLayout* grid;
+
+
+
     bool isWon();
+    void drawBombs();
+    void fillWithNumbers();
 
 
 };

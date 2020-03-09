@@ -8,15 +8,13 @@
 
 #include <QRandomGenerator>
 #include <QDebug>
+#include <QListIterator>
 
 #include <mswprbutton.h>
 #include "minesweeper.h"
 int main(int argc, char *argv[])
 {
-    /*QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-    return a.exec();
+    /*
 
     QJsonObject json_obj;
     json_obj["margin"] = 10;
@@ -30,20 +28,25 @@ int main(int argc, char *argv[])
     jsonfile.write(json_doc.toJson());
     jsonfile.close();
 
-    return 0;*/
+    return 0;
     for (int i = 0; i < 10; ++i)
     qDebug() << QRandomGenerator::system()->bounded(0, 20);
+*/
+
+
+
+    QApplication a(argc, argv);
+    MainWindow w;
+
+    auto minesweeper = new Minesweeper(&w, 3, 4, 8);
+
+    w.main_layout->addWidget(minesweeper);
+    w.main_layout->setAlignment(minesweeper, Qt::AlignCenter);
+    w.show();
 
 
 
 
-            QApplication a(argc, argv);
-                MainWindow w;
-
-                MswprButton b(&w, 9,9, false);
-                b.setText("hue");
-                Minesweeper m(&w, 5, 4, 2);
-                w.show();
-                return a.exec();
+    return a.exec();
     //return 0;
 }
