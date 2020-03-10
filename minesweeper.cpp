@@ -18,7 +18,7 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
     for (int i = 0; i < y; ++i) {
         QVector<QSharedPointer<MswprButton>> temp_vect = QVector<QSharedPointer<MswprButton>>();
         for (int j = 0; j < x; ++j)
-            temp_vect.push_back(QSharedPointer<MswprButton>(new MswprButton(this, j, i, true)));
+            temp_vect.push_back(QSharedPointer<MswprButton>(new MswprButton(this, j, i)));
         board.push_back(temp_vect);
     }
 
@@ -64,18 +64,20 @@ void Minesweeper::drawBombs() {
 }
 
 void Minesweeper::fillWithNumbers() {
+    // for each row
     for (auto row : board)
+        // for each element of that row
         for (auto elem : row)
             if (elem->getState() == bomb)
+                // check all surrounding fields
                 for (int i = elem->getX() - 1; i < elem->getX() + 2; ++i)
                     for (int j = elem->getY() - 1; j < elem->getY() + 2; ++j)
-                        if (    i > 0 && i < row.size() &&
-                                j > 0 && j < board.size() &&
+                        // if they exist and aren't a bomb
+                        if (    i >= 0 && i < row.size() &&
+                                j >= 0 && j < board.size() &&
                                 board.at(j).at(i)->getState() != bomb)
-                            board.at(j).at(i)->increaseBombsCount();
-
-
-
+                            // and increment they bomb counter
+                            board.value(j).value(i)->increaseBombsCount();
 }
 
 void Minesweeper::fieldClicked() {
