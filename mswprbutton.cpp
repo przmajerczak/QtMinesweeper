@@ -42,7 +42,3 @@ void MswprButton::increaseBombsCount() {
 void MswprButton::uncover() {
     this->setText(text);
 }
-
-int MswprButton::teeeest() {
-    return 42;
-}

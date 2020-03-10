@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
 
-    auto minesweeper = new Minesweeper(&w, 15, 15, 40);
+    auto minesweeper = new Minesweeper(&w, 15, 15, 100);
 
     w.main_layout->addWidget(minesweeper);
     w.main_layout->setAlignment(minesweeper, Qt::AlignCenter);

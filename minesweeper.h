@@ -5,6 +5,7 @@
 
 #include <QFrame>
 #include <QGridLayout>
+#include <QSignalMapper>
 
 class Minesweeper : public QWidget {
 
@@ -13,7 +14,7 @@ class Minesweeper : public QWidget {
 public:
     Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_count);
 public slots:
-    void fieldClicked(int _x);
+    void fieldClicked(int _arg);
 private:
     int dsf;
     int x;
@@ -22,6 +23,7 @@ private:
     int button_size;
     QVector<QVector<QSharedPointer<MswprButton>>> board;
     QGridLayout* grid;
+    QSignalMapper* sgnmap;
 
 
 

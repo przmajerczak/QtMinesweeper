@@ -22,7 +22,6 @@ public:
     int getY();
     void increaseBombsCount();
     void uncover();
-    int teeeest();
 
 private:
     int id_x;

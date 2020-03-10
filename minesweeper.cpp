@@ -4,6 +4,7 @@
 
 
 #include <QDebug>
+#include <QMessageBox>
 
 Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_count) : QWidget(parent){
     this->x = x_size;
@@ -26,15 +27,18 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
     grid = new QGridLayout(this);
     grid->setSpacing(0);
     this->setLayout(grid);
+    sgnmap = new QSignalMapper(this);
 
     for (auto row : board) {
         for (auto elem : row) {
-           connect(elem.data(), &MswprButton::teeeest, this, &Minesweeper::fieldClicked);
+           connect(elem.data(), SIGNAL(released()), sgnmap, SLOT(map()));
+           sgnmap->setMapping(elem.data(), elem->getY() * x + elem->getX());
            elem->setFixedSize(button_size, button_size);
            grid->addWidget(elem.data(), elem->getY(), elem->getX());
         }
     }
 
+    connect(sgnmap, SIGNAL(mapped(int)), this, SLOT(fieldClicked(int)));
 
 
 }
@@ -73,6 +77,29 @@ void Minesweeper::fillWithNumbers() {
                             board.value(j).value(i)->increaseBombsCount();
 }
 
-void Minesweeper::fieldClicked(int _x) {
-    qDebug() << _x << '\t' << _x << '\n';
+void Minesweeper::fieldClicked(int _arg) {
+    int field_x = _arg / x;
+    int field_y = _arg % x;
+    QSharedPointer<MswprButton> field = board.value(field_x).value(field_y);
+
+    field->uncover();
+
+    if (field->getState() == bomb) {
+        QMessageBox* msgbx = new QMessageBox(this);
+        msgbx->setWindowTitle(":C");
+        msgbx->setText("Bomba!");
+        msgbx->show();
+    }
+
+    if (this->isWon()) {
+        QMessageBox* msgbx = new QMessageBox(this);
+        msgbx->setWindowTitle(":D");
+        msgbx->setText("Wygrana!");
+        msgbx->show();
+    }
+
+}
+
+bool Minesweeper::isWon() {
+    return bombs_left ? false : true;
 }
