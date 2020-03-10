@@ -10,6 +10,9 @@ enum mswprBtn_state {
 };
 
 class MswprButton : public QPushButton {
+
+    Q_OBJECT
+
 public:
 
     MswprButton(QWidget* parent, int _x_id, int _y_id, bool is_bomb = false);
@@ -18,13 +21,15 @@ public:
     int getX();
     int getY();
     void increaseBombsCount();
+    void uncover();
+    int teeeest();
 
 private:
     int id_x;
     int id_y;
-    mswprBtn_state state;
-    bool is_covered;
     int neighbouring_bombs;
+    mswprBtn_state state;
+    QString text;
 };
 
 #endif // MSWPRBUTTON_H

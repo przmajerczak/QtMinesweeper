@@ -6,13 +6,16 @@
 #include <QFrame>
 #include <QGridLayout>
 
-class Minesweeper : public QWidget{
+class Minesweeper : public QWidget {
+
     Q_OBJECT
+
 public:
     Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_count);
-private slots:
-    void fieldClicked();
+public slots:
+    void fieldClicked(int _x);
 private:
+    int dsf;
     int x;
     int y;
     int bombs_left;

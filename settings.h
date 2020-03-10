@@ -6,6 +6,7 @@
 
 class Settings : public QWidget
 {
+    Q_OBJECT
 public:
     Settings();
 private:

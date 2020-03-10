@@ -9,9 +9,7 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
     this->x = x_size;
     this->y = y_size;
     this->bombs_left = bombs_count;
-
-
-
+    this->button_size = 40;     // to be set as settable parameter later
 
     // create board of fields
     board = QVector<QVector<QSharedPointer<MswprButton>>>();
@@ -27,20 +25,15 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
 
     grid = new QGridLayout(this);
     grid->setSpacing(0);
-    button_size = 30;
+    this->setLayout(grid);
 
     for (auto row : board) {
         for (auto elem : row) {
+           connect(elem.data(), &MswprButton::teeeest, this, &Minesweeper::fieldClicked);
            elem->setFixedSize(button_size, button_size);
            grid->addWidget(elem.data(), elem->getY(), elem->getX());
-            }
+        }
     }
-
-    setLayout(grid);
-
-
-
-
 
 
 
@@ -80,6 +73,6 @@ void Minesweeper::fillWithNumbers() {
                             board.value(j).value(i)->increaseBombsCount();
 }
 
-void Minesweeper::fieldClicked() {
-    ;
+void Minesweeper::fieldClicked(int _x) {
+    qDebug() << _x << '\t' << _x << '\n';
 }

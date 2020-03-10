@@ -3,7 +3,6 @@
 MswprButton::MswprButton(QWidget* parent, int _x_id, int _y_id, bool is_bomb) : QPushButton(parent) {
     this->id_x = _x_id;
     this->id_y = _y_id;
-    this->is_covered = true;
     this->state = is_bomb ? bomb : empty;
     this->neighbouring_bombs = 0;
 }
@@ -20,16 +19,15 @@ void MswprButton::setState(mswprBtn_state _stt) {
     this->state = _stt;
 
     switch (this->state) {
-    case empty:
-        this->setText("_");
-        break;
     case bomb:
-        this->setText("B");
+        text = "B";
         break;
     case number:
-        this->setText(QString::number(neighbouring_bombs));
+        text = QString::number(neighbouring_bombs);
         break;
-    }
+    default:
+        break;
+    };
 }
 
 mswprBtn_state MswprButton::getState() {
@@ -38,5 +36,13 @@ mswprBtn_state MswprButton::getState() {
 
 void MswprButton::increaseBombsCount() {
     neighbouring_bombs++;
-    this->setText(QString::number(neighbouring_bombs));
+    setState(number);
+}
+
+void MswprButton::uncover() {
+    this->setText(text);
+}
+
+int MswprButton::teeeest() {
+    return 42;
 }
