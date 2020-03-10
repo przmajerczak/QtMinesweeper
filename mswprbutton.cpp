@@ -18,15 +18,17 @@ int MswprButton::getY() {
 
 void MswprButton::setState(mswprBtn_state _stt) {
     this->state = _stt;
+
     switch (this->state) {
-    case 0:
+    case empty:
         this->setText("_");
         break;
-    case 9:
+    case bomb:
         this->setText("B");
         break;
-    default:
-        this->setText(QString::number(this->state));
+    case number:
+        this->setText(QString::number(neighbouring_bombs));
+        break;
     }
 }
 
