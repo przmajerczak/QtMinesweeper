@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     setMenuBar(menuBar);
 
     main_widget = new QWidget(this);
+    main_widget->setStyleSheet("QWidget {background-color:dimgray;}");
     main_layout = new QBoxLayout(QBoxLayout::TopToBottom, main_widget);
     main_widget->setLayout(main_layout);
     setCentralWidget(main_widget);

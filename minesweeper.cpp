@@ -10,7 +10,7 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
     this->x = x_size;
     this->y = y_size;
     this->bombs_left = bombs_count;
-    this->button_size = 40;     // to be set as settable parameter later
+    this->button_size = 35;     // to be set as settable parameter later
 
     // create board of fields
     board = QVector<QVector<QSharedPointer<MswprButton>>>();

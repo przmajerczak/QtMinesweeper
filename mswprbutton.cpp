@@ -5,6 +5,8 @@ MswprButton::MswprButton(QWidget* parent, int _x_id, int _y_id, bool is_bomb) : 
     this->id_y = _y_id;
     this->state = is_bomb ? bomb : empty;
     this->neighbouring_bombs = 0;
+
+    this->setStyleSheet("QPushButton { background-color: darkgrey;}");
 }
 
 int MswprButton::getX() {
@@ -41,4 +43,5 @@ void MswprButton::increaseBombsCount() {
 
 void MswprButton::uncover() {
     this->setText(text);
+    this->setStyleSheet("QPushButton {background-color: gainsboro;}");
 }
