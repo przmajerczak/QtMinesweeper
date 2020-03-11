@@ -11,6 +11,7 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
     this->board_y_size = y_size;
     this->bombs_left = this->bombs_count = bombs_count;
     this->fields_left_uncovered = board_x_size * board_y_size;
+    this->first_click_made = false;
     this->button_size = 30;     // to be set as settable parameter later
 
     // create board of fields
@@ -22,8 +23,7 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
         board.push_back(temp_vect);
     }
 
-    drawBombs();
-    fillWithNumbers();
+
 
     grid = new QGridLayout(this);
     grid->setSpacing(0);
@@ -46,14 +46,23 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
 
     connect(sgnmap_left, SIGNAL(mapped(int)), this, SLOT(fieldLeftClicked(int)));
     connect(sgnmap_right, SIGNAL(mapped(int)), this, SLOT(fieldRightClicked(int)));
-
-
 }
-void Minesweeper::drawBombs() {
+void Minesweeper::drawBombs(int _arg) {
     // create list of numbers from 0 to the number of fields
     QList<int> board_indexes;
     for (int i = 0; i < (this->board_x_size)*(this->board_y_size); ++i)
         board_indexes.append(i);
+
+    int field_y = _arg / board_x_size;
+    int field_x = _arg % board_x_size;
+    // exclude fisrt clicked field with neighbours
+    for (int i = field_x - 1; i <= field_x + 1; ++i)
+        for (int j = field_y - 1; j <= field_y + 1; ++j)
+            // if exist
+            if (    i >= 0 && i < board_x_size &&
+                    j >= 0 && j < board_y_size )
+            board_indexes.removeOne(j * board_x_size + i);
+
 
     /*  draw the index of the number of field from the list
      *  mark that field it as bomb using division and modulo
@@ -85,6 +94,12 @@ void Minesweeper::fillWithNumbers() {
 }
 
 void Minesweeper::fieldLeftClicked(int _arg) {
+    if (!first_click_made){
+        drawBombs(_arg);
+        fillWithNumbers();
+        first_click_made = true;
+    }
+
     int field_y = _arg / board_x_size;
     int field_x = _arg % board_x_size;
     QSharedPointer<MswprButton> field = board.value(field_y).value(field_x);
@@ -117,25 +132,28 @@ void Minesweeper::fieldLeftClicked(int _arg) {
 
 }
 void Minesweeper::fieldRightClicked(int _arg) {
-    int field_y = _arg / board_x_size;
-    int field_x = _arg % board_x_size;
-    QSharedPointer<MswprButton> field = board.value(field_y).value(field_x);
+    if (first_click_made) {
+        int field_y = _arg / board_x_size;
+        int field_x = _arg % board_x_size;
+        QSharedPointer<MswprButton> field = board.value(field_y).value(field_x);
 
-    if (field->isCovered()) {
-        field->clicked(Qt::RightButton);
+        if (field->isCovered()) {
+            field->clicked(Qt::RightButton);
 
-        if (field->isChecked())
-            bombs_left--;
-        else
-            bombs_left++;
+            if (field->isChecked())
+                bombs_left--;
+            else
+                bombs_left++;
 
-        if (this->isWon()) {
-            QMessageBox* msgbx = new QMessageBox(this);
-            msgbx->setWindowTitle(":D");
-            msgbx->setText("Wygrana!");
-            msgbx->show();
+            if (this->isWon()) {
+                QMessageBox* msgbx = new QMessageBox(this);
+                msgbx->setWindowTitle(":D");
+                msgbx->setText("Wygrana!");
+                msgbx->show();
+            }
         }
     }
+
 
 
     qDebug() << "Bombs_left: " << bombs_left << "\tFields_left: " << fields_left_uncovered;

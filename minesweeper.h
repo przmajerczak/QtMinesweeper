@@ -25,6 +25,7 @@ private:
     int bombs_count;
     int fields_left_uncovered;
     int button_size;
+    bool first_click_made;
     QVector<QVector<QSharedPointer<MswprButton>>> board;
     QGridLayout* grid;
     QSignalMapper* sgnmap_right;
@@ -33,7 +34,7 @@ private:
 
 
     bool isWon();
-    void drawBombs();
+    void drawBombs(int _arg);
     void fillWithNumbers();
     void uncoverEmpty(int field_x, int field_y);
 
