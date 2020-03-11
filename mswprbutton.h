@@ -2,6 +2,7 @@
 #define MSWPRBUTTON_H
 
 #include <QPushButton>
+#include <QMouseEvent>
 
 enum mswprBtn_state {
     empty,
@@ -21,12 +22,21 @@ public:
     int getX();
     int getY();
     void increaseBombsCount();
-    void uncover();
+    void clicked(Qt::MouseButton MsBtn);
+    bool isChecked() const;
+    bool isCovered() const;
 
+public slots:
+    void mousePressEvent(QMouseEvent* event) override;
+signals:
+    void leftClicked();
+    void rightClicked();
 private:
     int id_x;
     int id_y;
     int neighbouring_bombs;
+    bool checked;
+    bool covered;
     mswprBtn_state state;
     QString text;
 };

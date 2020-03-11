@@ -28,9 +28,6 @@ int main(int argc, char *argv[])
     jsonfile.write(json_doc.toJson());
     jsonfile.close();
 
-    return 0;
-    for (int i = 0; i < 10; ++i)
-    qDebug() << QRandomGenerator::system()->bounded(0, 20);
 */
 
 
@@ -38,7 +35,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
 
-    auto minesweeper = new Minesweeper(&w, 15, 15, 100);
+    auto minesweeper = new Minesweeper(&w, 20, 20, 40);
 
     w.main_layout->addWidget(minesweeper);
     w.main_layout->setAlignment(minesweeper, Qt::AlignCenter);

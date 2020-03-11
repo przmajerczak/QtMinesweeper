@@ -14,22 +14,28 @@ class Minesweeper : public QWidget {
 public:
     Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_count);
 public slots:
-    void fieldClicked(int _arg);
+    void fieldLeftClicked(int _arg);
+    void fieldRightClicked(int _arg);
+
 private:
     int dsf;
-    int x;
-    int y;
+    int board_x_size;
+    int board_y_size;
     int bombs_left;
+    int bombs_count;
+    int fields_left_uncovered;
     int button_size;
     QVector<QVector<QSharedPointer<MswprButton>>> board;
     QGridLayout* grid;
-    QSignalMapper* sgnmap;
+    QSignalMapper* sgnmap_right;
+    QSignalMapper* sgnmap_left;
 
 
 
     bool isWon();
     void drawBombs();
     void fillWithNumbers();
+    void uncoverEmpty(int field_x, int field_y);
 
 
 };

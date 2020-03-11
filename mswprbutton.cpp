@@ -1,10 +1,14 @@
 #include "mswprbutton.h"
 
+#include <QDebug>
+
 MswprButton::MswprButton(QWidget* parent, int _x_id, int _y_id, bool is_bomb) : QPushButton(parent) {
     this->id_x = _x_id;
     this->id_y = _y_id;
     this->state = is_bomb ? bomb : empty;
     this->neighbouring_bombs = 0;
+    this->checked = false;
+    this->covered = true;
 
     this->setStyleSheet("QPushButton { background-color: darkgrey;}");
 }
@@ -40,8 +44,35 @@ void MswprButton::increaseBombsCount() {
     neighbouring_bombs++;
     setState(number);
 }
+void MswprButton::clicked(Qt::MouseButton MsBtn) {
+    if (covered) {
+        if (MsBtn == Qt::LeftButton) {
+            if (!checked) {
+                covered = false;
+                this->setText(text);
+                this->setStyleSheet("QPushButton {background-color: gainsboro;}");
+            }
+        } else if (MsBtn == Qt::RightButton) {
+            checked = !checked;
+            if (checked)
+                this->setText("C");
+            else
+                this->setText("");
+        }
+    }
+}
 
-void MswprButton::uncover() {
-    this->setText(text);
-    this->setStyleSheet("QPushButton {background-color: gainsboro;}");
+void MswprButton::mousePressEvent(QMouseEvent* event) {
+    if (event->button() == Qt::RightButton)
+        emit rightClicked();
+    else if (event->button() == Qt::LeftButton)
+        emit leftClicked();
+}
+
+bool MswprButton::isCovered() const {
+    return this->covered;
+}
+
+bool MswprButton::isChecked() const {
+    return this->checked;
 }
