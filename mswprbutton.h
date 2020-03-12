@@ -30,6 +30,7 @@ public slots:
     void mousePressEvent(QMouseEvent* event) override;
 signals:
     void leftClicked();
+    void middleClicked();
     void rightClicked();
 private:
     int id_x;

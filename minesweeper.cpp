@@ -12,7 +12,7 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
     this->bombs_left = this->bombs_count = bombs_count;
     this->fields_left_uncovered = board_x_size * board_y_size;
     this->first_click_made = false;
-    this->button_size = 30;     // to be set as settable parameter later
+    this->button_size = 35;     // to be set as settable parameter later
 
     // create board of fields
     board = QVector<QVector<QSharedPointer<MswprButton>>>();
@@ -23,28 +23,76 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
         board.push_back(temp_vect);
     }
 
+    left_label = new QLabel("BOMBS LEFT: " + QString::number(bombs_left), this);
+    right_label = new QLabel("PROGRESS: " + QString::number(100 - (100 * (fields_left_uncovered - bombs_count) / (board_x_size * board_y_size - bombs_count))) + "%", this);
+
+    qDebug() << "border-top-right-radius: " + QString::number(button_size / 10) + "px;";
+
+    right_label->setStyleSheet("QLabel {"
+                               "background-color: #1a1a1a;"
+                               "color: yellow;"
+                               "border-top-left-radius: 0%;"
+                               "border-top-right-radius: 4%;"
+                               "border-bottom-left-radius: 0%;"
+                               "border-bottom-right-radius: 4%;"
+                               "border-width: " + QString::number(button_size / 10) + "px;"
+                               "border-left-width: 0px;"
+                               "border-style: solid;"
+                               "border-color: black;"
+                               "}");
+    left_label->setStyleSheet("QLabel {"
+                              "background-color: #1a1a1a;"
+                              "color: yellow;"
+                              "border-top-left-radius: 4%;"
+                              "border-top-right-radius: 0%;"
+                              "border-bottom-left-radius: 4%;"
+                              "border-bottom-right-radius: 0%;"
+                              "border-width: " + QString::number(button_size / 10) + "px;"
+                              "border-right-width: 0px;"
+                              "border-style: solid;"
+                              "border-color: black;"
+                              "}");
+
+    left_label->setFixedSize(1 + board_x_size * button_size / 2, button_size);
+    right_label->setFixedSize(1 + board_x_size * button_size / 2, button_size);
+    right_label->setAlignment(Qt::AlignRight | Qt::AlignCenter);
 
 
-    grid = new QGridLayout(this);
+    grid = new QGridLayout();
     grid->setSpacing(0);
-    this->setLayout(grid);
+    box = new QHBoxLayout();
+    box->setSpacing(0);
+    box->addWidget(left_label, 0, Qt::AlignLeft);
+    box->addWidget(right_label, 0, Qt::AlignRight);
+
+
+    main_layout = new QVBoxLayout(this);
+    main_layout->setSpacing(button_size / 10);
+    this->setLayout(main_layout);
+    main_layout->addLayout(box);
+    main_layout->addLayout(grid);
+
     sgnmap_left = new QSignalMapper(this);
+    sgnmap_middle = new QSignalMapper(this);
     sgnmap_right = new QSignalMapper(this);
 
     for (auto row : board) {
         for (auto elem : row) {
             connect(elem.data(), SIGNAL(leftClicked()), sgnmap_left, SLOT(map()));
+            connect(elem.data(), SIGNAL(middleClicked()), sgnmap_middle, SLOT(map()));
             connect(elem.data(), SIGNAL(rightClicked()), sgnmap_right, SLOT(map()));
 
             sgnmap_left->setMapping(elem.data(), elem->getY() * board_x_size + elem->getX());
+            sgnmap_middle->setMapping(elem.data(), elem->getY() * board_x_size + elem->getX());
             sgnmap_right->setMapping(elem.data(), elem->getY() * board_x_size + elem->getX());
 
             elem->setFixedSize(button_size, button_size);
-            grid->addWidget(elem.data(), elem->getY(), elem->getX());
+            grid->addWidget(elem.data(), 1 + elem->getY(), elem->getX());
         }
     }
 
     connect(sgnmap_left, SIGNAL(mapped(int)), this, SLOT(fieldLeftClicked(int)));
+    connect(sgnmap_middle, SIGNAL(mapped(int)), this, SLOT(fieldMiddleClicked(int)));
     connect(sgnmap_right, SIGNAL(mapped(int)), this, SLOT(fieldRightClicked(int)));
 }
 void Minesweeper::drawBombs(int _arg) {
@@ -55,7 +103,8 @@ void Minesweeper::drawBombs(int _arg) {
 
     int field_y = _arg / board_x_size;
     int field_x = _arg % board_x_size;
-    // exclude fisrt clicked field with neighbours
+
+    // exclude first clicked field with neighbours
     for (int i = field_x - 1; i <= field_x + 1; ++i)
         for (int j = field_y - 1; j <= field_y + 1; ++j)
             // if exist
@@ -126,7 +175,35 @@ void Minesweeper::fieldLeftClicked(int _arg) {
             msgbx->setText("Wygrana!");
             msgbx->show();
         }
+
+        right_label->setText("PROGRESS: " + QString::number(100 - (100 * (fields_left_uncovered - bombs_count) / (board_x_size * board_y_size - bombs_count))) + "%");
     }
+
+    qDebug() << "Bombs_left: " << bombs_left << "\tFields_left: " << fields_left_uncovered;
+
+}
+void Minesweeper::fieldMiddleClicked(int _arg) {
+    if (!first_click_made){
+        drawBombs(_arg);
+        fillWithNumbers();
+        first_click_made = true;
+    }
+
+    int field_y = _arg / board_x_size;
+    int field_x = _arg % board_x_size;
+    QSharedPointer<MswprButton> field = board.value(field_y).value(field_x);
+
+        for (int i = field_x - 1; i <= field_x + 1; ++i)
+            for (int j = field_y - 1; j <= field_y + 1; ++j)
+                // if they exist
+                if (    i >= 0 && i < board_x_size &&
+                        j >= 0 && j < board_y_size )
+                    // aren't current field
+                    if (!(i == field_x && j == field_y))
+                        // and are clickable
+                        fieldLeftClicked(j * board_x_size + i);
+
+
 
     qDebug() << "Bombs_left: " << bombs_left << "\tFields_left: " << fields_left_uncovered;
 
@@ -151,6 +228,8 @@ void Minesweeper::fieldRightClicked(int _arg) {
                 msgbx->setText("Wygrana!");
                 msgbx->show();
             }
+
+            left_label->setText("BOMBS LEFT: " + QString::number(bombs_left));
         }
     }
 

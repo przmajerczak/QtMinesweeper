@@ -67,6 +67,8 @@ void MswprButton::mousePressEvent(QMouseEvent* event) {
         emit rightClicked();
     else if (event->button() == Qt::LeftButton)
         emit leftClicked();
+    else if (event->button() == Qt::MiddleButton)
+        emit middleClicked();
 }
 
 bool MswprButton::isCovered() const {

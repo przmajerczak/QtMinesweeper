@@ -5,6 +5,7 @@
 
 #include <QFrame>
 #include <QGridLayout>
+#include <QLabel>
 #include <QSignalMapper>
 
 class Minesweeper : public QWidget {
@@ -15,6 +16,7 @@ public:
     Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_count);
 public slots:
     void fieldLeftClicked(int _arg);
+    void fieldMiddleClicked(int _arg);
     void fieldRightClicked(int _arg);
 
 private:
@@ -27,9 +29,14 @@ private:
     int button_size;
     bool first_click_made;
     QVector<QVector<QSharedPointer<MswprButton>>> board;
+    QLabel* left_label;
+    QLabel* right_label;
+    QVBoxLayout* main_layout;
+    QHBoxLayout* box;
     QGridLayout* grid;
-    QSignalMapper* sgnmap_right;
     QSignalMapper* sgnmap_left;
+    QSignalMapper* sgnmap_middle;
+    QSignalMapper* sgnmap_right;
 
 
 
