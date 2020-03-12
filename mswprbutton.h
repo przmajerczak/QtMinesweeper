@@ -25,7 +25,8 @@ public:
     void clicked(Qt::MouseButton MsBtn);
     bool isChecked() const;
     bool isCovered() const;
-
+    static QIcon* checked_icon;
+    void setSize(int _size);
 public slots:
     void mousePressEvent(QMouseEvent* event) override;
 signals:
@@ -36,6 +37,7 @@ private:
     int id_x;
     int id_y;
     int neighbouring_bombs;
+    int button_size;
     bool checked;
     bool covered;
     mswprBtn_state state;

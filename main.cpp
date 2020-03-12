@@ -8,10 +8,14 @@
 
 #include <QRandomGenerator>
 #include <QDebug>
-#include <QListIterator>
+
+#include <QtMath>
 
 #include <mswprbutton.h>
 #include "minesweeper.h"
+
+QIcon* MswprButton::checked_icon = new QIcon("checked_icon.svg");
+
 int main(int argc, char *argv[])
 {
     /*
@@ -31,11 +35,10 @@ int main(int argc, char *argv[])
 */
 
 
-
     QApplication a(argc, argv);
     MainWindow w;
 
-    auto minesweeper = new Minesweeper(&w, 8, 8, 14);
+    auto minesweeper = new Minesweeper(&w, 20, 14, 20*14/5);
 
     w.main_layout->addWidget(minesweeper);
     w.main_layout->setAlignment(minesweeper, Qt::AlignCenter);

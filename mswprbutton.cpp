@@ -54,10 +54,12 @@ void MswprButton::clicked(Qt::MouseButton MsBtn) {
             }
         } else if (MsBtn == Qt::RightButton) {
             checked = !checked;
-            if (checked)
-                this->setText("C");
+            if (checked) {
+                this->setIcon(*checked_icon);
+                this->setIconSize(QSize(1.2 * button_size, 1.2 * button_size));
+            }
             else
-                this->setText("");
+                this->setIcon(QIcon());
         }
     }
 }
@@ -77,4 +79,9 @@ bool MswprButton::isCovered() const {
 
 bool MswprButton::isChecked() const {
     return this->checked;
+}
+
+void MswprButton::setSize(int _size) {
+    this->button_size = _size;
+    this->setFixedSize(button_size, button_size);
 }

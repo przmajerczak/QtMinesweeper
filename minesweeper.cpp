@@ -4,7 +4,9 @@
 
 
 #include <QDebug>
+#include <QFontDatabase>
 #include <QMessageBox>
+#include <QtMath>
 
 Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_count) : QWidget(parent){
     this->board_x_size = x_size;
@@ -22,9 +24,13 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
             temp_vect.push_back(QSharedPointer<MswprButton>(new MswprButton(this, j, i)));
         board.push_back(temp_vect);
     }
-
+    QFontDatabase::addApplicationFont("digital-7-italic.ttf");
+    QFont font("digital-7", button_size * 0.7);
     left_label = new QLabel("BOMBS LEFT: " + QString::number(bombs_left), this);
-    right_label = new QLabel("PROGRESS: " + QString::number(100 - (100 * (fields_left_uncovered - bombs_count) / (board_x_size * board_y_size - bombs_count))) + "%", this);
+    right_label = new QLabel("PROGRESS: " + QString::number(qFloor(100 - (100 * (fields_left_uncovered - bombs_count) / (board_x_size * board_y_size - bombs_count)))) + "%", this);
+
+    left_label->setFont(font);
+    right_label->setFont(font);
 
     qDebug() << "border-top-right-radius: " + QString::number(button_size / 10) + "px;";
 
@@ -86,7 +92,7 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
             sgnmap_middle->setMapping(elem.data(), elem->getY() * board_x_size + elem->getX());
             sgnmap_right->setMapping(elem.data(), elem->getY() * board_x_size + elem->getX());
 
-            elem->setFixedSize(button_size, button_size);
+            elem->setSize(button_size);
             grid->addWidget(elem.data(), 1 + elem->getY(), elem->getX());
         }
     }
@@ -176,7 +182,7 @@ void Minesweeper::fieldLeftClicked(int _arg) {
             msgbx->show();
         }
 
-        right_label->setText("PROGRESS: " + QString::number(100 - (100 * (fields_left_uncovered - bombs_count) / (board_x_size * board_y_size - bombs_count))) + "%");
+        right_label->setText("PROGRESS: " + QString::number(qFloor(100 - (100 * (fields_left_uncovered - bombs_count) / (board_x_size * board_y_size - bombs_count)))) + "%");
     }
 
     qDebug() << "Bombs_left: " << bombs_left << "\tFields_left: " << fields_left_uncovered;
@@ -199,7 +205,7 @@ void Minesweeper::fieldMiddleClicked(int _arg) {
                 if (    i >= 0 && i < board_x_size &&
                         j >= 0 && j < board_y_size )
                     // aren't current field
-                    if (!(i == field_x && j == field_y))
+                    //if (!(i == field_x && j == field_y))
                         // and are clickable
                         fieldLeftClicked(j * board_x_size + i);
 
