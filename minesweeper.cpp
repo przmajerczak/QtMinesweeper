@@ -1,20 +1,23 @@
 #include "minesweeper.h"
 
 #include <QRandomGenerator>
-
-
 #include <QDebug>
 #include <QFontDatabase>
 #include <QMessageBox>
 #include <QtMath>
 
-Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_count) : QWidget(parent){
+Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_count) : QMainWindow(parent){
     this->board_x_size = x_size;
     this->board_y_size = y_size;
     this->bombs_left = this->bombs_count = bombs_count;
     this->fields_left_uncovered = board_x_size * board_y_size;
     this->first_click_made = false;
-    this->button_size = 35;     // to be set as settable parameter later
+    this->button_size = 30;     // to be set as settable parameter later
+
+    grid = new QGridLayout();
+    box = new QHBoxLayout();
+    main_layout = new QVBoxLayout();
+    main_widget = new QWidget(this);
 
     // create board of fields
     board = QVector<QVector<QSharedPointer<MswprButton>>>();
@@ -24,15 +27,38 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
             temp_vect.push_back(QSharedPointer<MswprButton>(new MswprButton(this, j, i)));
         board.push_back(temp_vect);
     }
+
+    sgnmap_left = new QSignalMapper(this);
+    sgnmap_middle = new QSignalMapper(this);
+    sgnmap_right = new QSignalMapper(this);
+
+    for (auto row : board) {
+        for (auto elem : row) {
+            connect(elem.data(), SIGNAL(leftClicked()), sgnmap_left, SLOT(map()));
+            connect(elem.data(), SIGNAL(middleClicked()), sgnmap_middle, SLOT(map()));
+            connect(elem.data(), SIGNAL(rightClicked()), sgnmap_right, SLOT(map()));
+
+            sgnmap_left->setMapping(elem.data(), elem->getY() * board_x_size + elem->getX());
+            sgnmap_middle->setMapping(elem.data(), elem->getY() * board_x_size + elem->getX());
+            sgnmap_right->setMapping(elem.data(), elem->getY() * board_x_size + elem->getX());
+
+            elem->setSize(button_size);
+            elem->setFont(QFont("Sans Serif", button_size * 0.5, QFont::DemiBold));
+            grid->addWidget(elem.data(), 1 + elem->getY(), elem->getX());
+        }
+    }
+
+    connect(sgnmap_left, SIGNAL(mapped(int)), this, SLOT(fieldLeftClicked(int)));
+    connect(sgnmap_middle, SIGNAL(mapped(int)), this, SLOT(fieldMiddleClicked(int)));
+    connect(sgnmap_right, SIGNAL(mapped(int)), this, SLOT(fieldRightClicked(int)));
+
     QFontDatabase::addApplicationFont("digital-7-italic.ttf");
-    QFont font("digital-7", button_size * 0.7);
+    QFont font("Digital-7", button_size * 0.7);
     left_label = new QLabel("BOMBS LEFT: " + QString::number(bombs_left), this);
     right_label = new QLabel("PROGRESS: " + QString::number(qFloor(100 - (100 * (fields_left_uncovered - bombs_count) / (board_x_size * board_y_size - bombs_count)))) + "%", this);
 
     left_label->setFont(font);
     right_label->setFont(font);
-
-    qDebug() << "border-top-right-radius: " + QString::number(button_size / 10) + "px;";
 
     right_label->setStyleSheet("QLabel {"
                                "background-color: #1a1a1a;"
@@ -59,47 +85,47 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
                               "border-color: black;"
                               "}");
 
-    left_label->setFixedSize(1 + board_x_size * button_size / 2, button_size);
-    right_label->setFixedSize(1 + board_x_size * button_size / 2, button_size);
+    left_label->setFixedHeight(button_size);
+    left_label->setMinimumWidth(1 + board_x_size * button_size / 2);
+    right_label->setFixedHeight(button_size);
+    right_label->setMinimumWidth(1 + board_x_size * button_size / 2);
+
+    //left_label->setFixedSize(1 + board_x_size * button_size / 2, button_size);
+    //right_label->setFixedSize(1 + board_x_size * button_size / 2, button_size);
     right_label->setAlignment(Qt::AlignRight | Qt::AlignCenter);
 
-
-    grid = new QGridLayout();
     grid->setSpacing(0);
-    box = new QHBoxLayout();
     box->setSpacing(0);
     box->addWidget(left_label, 0, Qt::AlignLeft);
     box->addWidget(right_label, 0, Qt::AlignRight);
 
-
-    main_layout = new QVBoxLayout(this);
+    main_layout->addLayout(box);
+    main_layout->addLayout(grid);
     main_layout->setSpacing(button_size / 10);
-    this->setLayout(main_layout);
+    main_layout->setAlignment(grid, Qt::AlignCenter | Qt::AlignHCenter);
+    main_widget->setLayout(main_layout);
+    this->setStyleSheet("QMainWindow {background-color:dimgray;}");
+
+    this->setCentralWidget(main_widget);
+
+    connect(this, SIGNAL(resized()), this, SLOT(onResize()));
+
+
+    /*
+
+    main_layout = new QVBoxLayout(main_widget);
+    main_layout->setSpacing(button_size / 10);
+    main_widget->setLayout(main_layout);
     main_layout->addLayout(box);
     main_layout->addLayout(grid);
 
-    sgnmap_left = new QSignalMapper(this);
-    sgnmap_middle = new QSignalMapper(this);
-    sgnmap_right = new QSignalMapper(this);
+    this->setStyleSheet("QWidget {background-color:dimgray;}");
+    mainer_layout = new QBoxLayout(QBoxLayout::TopToBottom, this);
+    this->setLayout(mainer_layout);
+    mainer_layout->addWidget(this);
+    mainer_layout->setAlignment(this, Qt::AlignCenter);
+    */
 
-    for (auto row : board) {
-        for (auto elem : row) {
-            connect(elem.data(), SIGNAL(leftClicked()), sgnmap_left, SLOT(map()));
-            connect(elem.data(), SIGNAL(middleClicked()), sgnmap_middle, SLOT(map()));
-            connect(elem.data(), SIGNAL(rightClicked()), sgnmap_right, SLOT(map()));
-
-            sgnmap_left->setMapping(elem.data(), elem->getY() * board_x_size + elem->getX());
-            sgnmap_middle->setMapping(elem.data(), elem->getY() * board_x_size + elem->getX());
-            sgnmap_right->setMapping(elem.data(), elem->getY() * board_x_size + elem->getX());
-
-            elem->setSize(button_size);
-            grid->addWidget(elem.data(), 1 + elem->getY(), elem->getX());
-        }
-    }
-
-    connect(sgnmap_left, SIGNAL(mapped(int)), this, SLOT(fieldLeftClicked(int)));
-    connect(sgnmap_middle, SIGNAL(mapped(int)), this, SLOT(fieldMiddleClicked(int)));
-    connect(sgnmap_right, SIGNAL(mapped(int)), this, SLOT(fieldRightClicked(int)));
 }
 void Minesweeper::drawBombs(int _arg) {
     // create list of numbers from 0 to the number of fields
@@ -184,9 +210,6 @@ void Minesweeper::fieldLeftClicked(int _arg) {
 
         right_label->setText("PROGRESS: " + QString::number(qFloor(100 - (100 * (fields_left_uncovered - bombs_count) / (board_x_size * board_y_size - bombs_count)))) + "%");
     }
-
-    qDebug() << "Bombs_left: " << bombs_left << "\tFields_left: " << fields_left_uncovered;
-
 }
 void Minesweeper::fieldMiddleClicked(int _arg) {
     if (!first_click_made){
@@ -208,11 +231,6 @@ void Minesweeper::fieldMiddleClicked(int _arg) {
                     //if (!(i == field_x && j == field_y))
                         // and are clickable
                         fieldLeftClicked(j * board_x_size + i);
-
-
-
-    qDebug() << "Bombs_left: " << bombs_left << "\tFields_left: " << fields_left_uncovered;
-
 }
 void Minesweeper::fieldRightClicked(int _arg) {
     if (first_click_made) {
@@ -238,10 +256,18 @@ void Minesweeper::fieldRightClicked(int _arg) {
             left_label->setText("BOMBS LEFT: " + QString::number(bombs_left));
         }
     }
+}
 
+void Minesweeper::onResize() {
 
+    qDebug() << main_widget->geometry().width();
+    //qDebug() << *margin;
+    //left_label->setFixedSize(1 + (main_widget->geometry().width() - 11) / 2, button_size);
+    //right_label->setFixedSize(1 + (main_widget->geometry().width() - 11) / 2, button_size);
+}
 
-    qDebug() << "Bombs_left: " << bombs_left << "\tFields_left: " << fields_left_uncovered;
+void Minesweeper::resizeEvent(QResizeEvent* event) {
+    emit resized();
 }
 
 bool Minesweeper::isWon() {

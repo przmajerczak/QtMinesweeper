@@ -3,12 +3,13 @@
 
 #include "mswprbutton.h"
 
+#include <QMainWindow>
 #include <QFrame>
 #include <QGridLayout>
 #include <QLabel>
 #include <QSignalMapper>
 
-class Minesweeper : public QWidget {
+class Minesweeper : public QMainWindow {
 
     Q_OBJECT
 
@@ -18,7 +19,11 @@ public slots:
     void fieldLeftClicked(int _arg);
     void fieldMiddleClicked(int _arg);
     void fieldRightClicked(int _arg);
+    void onResize();
 
+    void resizeEvent(QResizeEvent* event) override;
+signals:
+    void resized();
 private:
     int dsf;
     int board_x_size;
@@ -34,10 +39,10 @@ private:
     QVBoxLayout* main_layout;
     QHBoxLayout* box;
     QGridLayout* grid;
+    QWidget* main_widget;
     QSignalMapper* sgnmap_left;
     QSignalMapper* sgnmap_middle;
     QSignalMapper* sgnmap_right;
-
 
 
     bool isWon();

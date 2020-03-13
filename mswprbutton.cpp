@@ -24,16 +24,8 @@ int MswprButton::getY() {
 void MswprButton::setState(mswprBtn_state _stt) {
     this->state = _stt;
 
-    switch (this->state) {
-    case bomb:
-        text = "B";
-        break;
-    case number:
+    if (state == number)
         text = QString::number(neighbouring_bombs);
-        break;
-    default:
-        break;
-    };
 }
 
 mswprBtn_state MswprButton::getState() {
@@ -49,8 +41,14 @@ void MswprButton::clicked(Qt::MouseButton MsBtn) {
         if (MsBtn == Qt::LeftButton) {
             if (!checked) {
                 covered = false;
-                this->setText(text);
                 this->setStyleSheet("QPushButton {background-color: gainsboro;}");
+                this->setText(text);
+
+                if (state == bomb) {
+                    this->setText("");
+                    this->setIcon(QIcon("boom.png"));
+                    this->setIconSize(QSize(0.92*button_size, 0.92*button_size));
+                }
             }
         } else if (MsBtn == Qt::RightButton) {
             checked = !checked;

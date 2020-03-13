@@ -36,13 +36,14 @@ int main(int argc, char *argv[])
 
 
     QApplication a(argc, argv);
-    MainWindow w;
+/*    MainWindow w;
 
-    auto minesweeper = new Minesweeper(&w, 20, 14, 20*14/5);
 
-    w.main_layout->addWidget(minesweeper);
-    w.main_layout->setAlignment(minesweeper, Qt::AlignCenter);
+    w.setCentralWidget(new Minesweeper(&w, 16, 12 , 16*12 / 5));
     w.show();
+*/
+    Minesweeper mine(nullptr, 15, 10, 30);
+    mine.show();
 
 
 

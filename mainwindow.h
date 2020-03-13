@@ -6,10 +6,6 @@
 #include <QPushButton>
 #include <QLayout>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -22,6 +18,6 @@ public:
 private:
     QMenuBar* menuBar;
 
-    QWidget* main_widget;
+
 };
 #endif // MAINWINDOW_H

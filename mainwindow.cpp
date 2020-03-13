@@ -9,11 +9,11 @@ MainWindow::MainWindow(QWidget *parent)
     menuBar = new QMenuBar(this);
     setMenuBar(menuBar);
 
-    main_widget = new QWidget(this);
+    /*main_widget = new QWidget(this);
     main_widget->setStyleSheet("QWidget {background-color:dimgray;}");
-    main_layout = new QBoxLayout(QBoxLayout::TopToBottom, main_widget);
-    main_widget->setLayout(main_layout);
-    setCentralWidget(main_widget);
+    mainer_layout = new QBoxLayout(QBoxLayout::TopToBottom, main_widget);
+    main_widget->setLayout(mainer_layout);
+    setCentralWidget(main_widget);*/
 }
 
 MainWindow::~MainWindow()
