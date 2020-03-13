@@ -2,6 +2,9 @@
 
 #include <QDebug>
 
+
+QIcon* MswprButton::checked_icon = new QIcon("checked_icon.svg");
+
 MswprButton::MswprButton(QWidget* parent, int _x_id, int _y_id, bool is_bomb) : QPushButton(parent) {
     this->id_x = _x_id;
     this->id_y = _y_id;

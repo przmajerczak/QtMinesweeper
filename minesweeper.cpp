@@ -2,7 +2,6 @@
 
 #include <QRandomGenerator>
 #include <QDebug>
-#include <QFontDatabase>
 #include <QMessageBox>
 #include <QtMath>
 
@@ -60,27 +59,11 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
     main_layout->setSpacing(button_size / 10);
     main_layout->setAlignment(grid, Qt::AlignCenter);
     main_widget->setLayout(main_layout);
-    this->setStyleSheet("QMainWindow {background-color:dimgray;}");
+    this->setStyleSheet("QMainWindow {"
+                        "background-color:dimgray;"
+                        "}");
 
     this->setCentralWidget(main_widget);
-
-    connect(this, SIGNAL(resized()), this, SLOT(onResize()));
-
-//progressbar_widget->setStyleSheet("QWidget {background-color:blue;}");
-    /*
-
-    main_layout = new QVBoxLayout(main_widget);
-    main_layout->setSpacing(button_size / 10);
-    main_widget->setLayout(main_layout);
-    main_layout->addLayout(box);
-    main_layout->addLayout(grid);
-
-    this->setStyleSheet("QWidget {background-color:dimgray;}");
-    mainer_layout = new QBoxLayout(QBoxLayout::TopToBottom, this);
-    this->setLayout(mainer_layout);
-    mainer_layout->addWidget(this);
-    mainer_layout->setAlignment(this, Qt::AlignCenter);
-    */
 }
 void Minesweeper::drawBombs(int _arg) {
     // create list of numbers from 0 to the number of fields
@@ -161,7 +144,7 @@ void Minesweeper::fieldLeftClicked(int _arg) {
             msgbx->show();
         }
 
-        right_label->setText("PROGRESS: " + QString::number(qFloor(100 - (100 * (fields_left_uncovered - bombs_count) / (board_x_size * board_y_size - bombs_count)))) + "%");
+        //PRZEROBIIIIIĆright_label->setText("PROGRESS: " + QString::number(qFloor(100 - (100 * (fields_left_uncovered - bombs_count) / (board_x_size * board_y_size - bombs_count)))) + "%");
     }
 }
 void Minesweeper::fieldMiddleClicked(int _arg) {
@@ -206,19 +189,9 @@ void Minesweeper::fieldRightClicked(int _arg) {
                 msgbx->show();
             }
 
-            left_label->setText("BOMBS LEFT: " + QString::number(bombs_left));
+            //PRZEROBIIIIIĆleft_label->setText("BOMBS LEFT: " + QString::number(bombs_left));
         }
     }
-}
-void Minesweeper::onResize() {
-
-    qDebug() << main_widget->geometry().width();
-    //qDebug() << *margin;
-    //left_label->setFixedSize(1 + (main_widget->geometry().width() - 11) / 2, button_size);
-    //right_label->setFixedSize(1 + (main_widget->geometry().width() - 11) / 2, button_size);
-}
-void Minesweeper::resizeEvent(QResizeEvent* event) {
-    emit resized();
 }
 bool Minesweeper::isWon() {
     return fields_left_uncovered == bombs_count;

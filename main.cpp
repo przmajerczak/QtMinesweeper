@@ -1,20 +1,12 @@
-#include "mainwindow.h"
-
 #include <QApplication>
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <iostream>
-
-#include <QRandomGenerator>
 #include <QDebug>
 
-#include <QtMath>
 
-#include <mswprbutton.h>
 #include "minesweeper.h"
 
-QIcon* MswprButton::checked_icon = new QIcon("checked_icon.svg");
 
 int main(int argc, char *argv[])
 {
@@ -34,20 +26,10 @@ int main(int argc, char *argv[])
 
 */
 
-
     QApplication a(argc, argv);
-/*    MainWindow w;
 
-
-    w.setCentralWidget(new Minesweeper(&w, 16, 12 , 16*12 / 5));
-    w.show();
-*/
     Minesweeper mine(nullptr, 15, 10, 30);
     mine.show();
 
-
-
-
     return a.exec();
-    //return 0;
 }

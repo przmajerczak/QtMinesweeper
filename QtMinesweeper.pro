@@ -17,14 +17,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp \
     minesweeper.cpp \
     mswprbutton.cpp \
     progressbar.cpp \
     settings.cpp
 
 HEADERS += \
-    mainwindow.h \
     minesweeper.h \
     mswprbutton.h \
     progressbar.h \

@@ -20,11 +20,6 @@ public slots:
     void fieldLeftClicked(int _arg);
     void fieldMiddleClicked(int _arg);
     void fieldRightClicked(int _arg);
-    void onResize();
-
-    void resizeEvent(QResizeEvent* event) override;
-signals:
-    void resized();
 private:
     int dsf;
     int board_x_size;
