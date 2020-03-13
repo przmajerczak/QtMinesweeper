@@ -18,11 +18,6 @@ ProgressBar::ProgressBar(QWidget* parent, int _size, int _bombs_left) : QWidget(
     left_label->setFont(*font);
     right_label->setFont(*font);
 
-    //left_label->setFixedHeight(0.7 * size);
-    //right_label->setFixedHeight(0.7 * size);
-
-
-
     setFixedHeight(size);
     setStyleSheet("ProgressBar {"
                                    "background-color: #1a1a1a;"
@@ -56,4 +51,10 @@ void ProgressBar::paintEvent(QPaintEvent *)
 }
 void ProgressBar::bombsLeft(int _bombs) {
 
+}
+ProgressBar::~ProgressBar() {
+    delete box;
+    delete font;
+    delete left_label;
+    delete right_label;
 }

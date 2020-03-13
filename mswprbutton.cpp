@@ -4,8 +4,10 @@
 
 
 QIcon* MswprButton::checked_icon = new QIcon("checked_icon.svg");
+int MswprButton::mswprbuttons_count = 0;
 
 MswprButton::MswprButton(QWidget* parent, int _x_id, int _y_id, bool is_bomb) : QPushButton(parent) {
+    qDebug() << ++mswprbuttons_count;
     this->id_x = _x_id;
     this->id_y = _y_id;
     this->state = is_bomb ? bomb : empty;
@@ -76,4 +78,10 @@ bool MswprButton::isChecked() const {
 void MswprButton::setSize(int _size) {
     this->button_size = _size;
     this->setFixedSize(button_size, button_size);
+}
+MswprButton::~MswprButton() {
+    if (mswprbuttons_count == 1)
+        delete checked_icon;
+    else
+        --mswprbuttons_count;
 }

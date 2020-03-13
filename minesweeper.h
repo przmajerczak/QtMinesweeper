@@ -15,7 +15,8 @@ class Minesweeper : public QMainWindow {
     Q_OBJECT
 
 public:
-    Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_count);
+    Minesweeper(QWidget* parent, int _x_size, int _y_size, int _bombs_count, int _button_size);
+    ~Minesweeper();
 public slots:
     void fieldLeftClicked(int _arg);
     void fieldMiddleClicked(int _arg);
@@ -44,6 +45,7 @@ private:
 
 
     bool isWon();
+    void boardInit();
     void drawBombs(int _arg);
     void fillWithNumbers();
     void uncoverEmpty(int field_x, int field_y);

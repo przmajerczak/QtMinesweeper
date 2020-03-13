@@ -5,19 +5,35 @@
 #include <QMessageBox>
 #include <QtMath>
 
-Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_count) : QMainWindow(parent){
-    this->board_x_size = x_size;
-    this->board_y_size = y_size;
-    this->bombs_left = this->bombs_count = bombs_count;
+Minesweeper::Minesweeper(QWidget* parent, int _x_size, int _y_size, int _bombs_count, int _button_size) : QMainWindow(parent){
+    this->board_x_size = _x_size;
+    this->board_y_size = _y_size;
+    this->bombs_left = this->bombs_count = _bombs_count;
     this->fields_left_uncovered = board_x_size * board_y_size;
     this->first_click_made = false;
-    this->button_size = 30;     // to be set as settable parameter later
+    this->button_size = _button_size;
 
     grid = new QGridLayout();
     main_layout = new QVBoxLayout();
     main_widget = new QWidget(this);
     progressBar = new ProgressBar(this, button_size, bombs_left);
 
+    boardInit();
+
+    grid->setSpacing(0);
+
+    main_layout->addWidget(progressBar);
+    main_layout->addLayout(grid);
+    main_layout->setSpacing(button_size / 10);
+    main_layout->setAlignment(grid, Qt::AlignCenter);
+    main_widget->setLayout(main_layout);
+    this->setStyleSheet("QMainWindow {"
+                        "background-color:dimgray;"
+                        "}");
+
+    this->setCentralWidget(main_widget);
+}
+void Minesweeper::boardInit() {
     // create board of fields
     board = QVector<QVector<QSharedPointer<MswprButton>>>();
     for (int i = 0; i < board_y_size; ++i) {
@@ -50,20 +66,6 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
     connect(sgnmap_left, SIGNAL(mapped(int)), this, SLOT(fieldLeftClicked(int)));
     connect(sgnmap_middle, SIGNAL(mapped(int)), this, SLOT(fieldMiddleClicked(int)));
     connect(sgnmap_right, SIGNAL(mapped(int)), this, SLOT(fieldRightClicked(int)));
-
-    grid->setSpacing(0);
-
-
-    main_layout->addWidget(progressBar);
-    main_layout->addLayout(grid);
-    main_layout->setSpacing(button_size / 10);
-    main_layout->setAlignment(grid, Qt::AlignCenter);
-    main_widget->setLayout(main_layout);
-    this->setStyleSheet("QMainWindow {"
-                        "background-color:dimgray;"
-                        "}");
-
-    this->setCentralWidget(main_widget);
 }
 void Minesweeper::drawBombs(int _arg) {
     // create list of numbers from 0 to the number of fields
@@ -217,4 +219,13 @@ void Minesweeper::uncoverEmpty(int field_x, int field_y) {
                             if (!board.value(j).value(i)->isChecked())
                                 uncoverEmpty(i, j);
     }
+}
+
+Minesweeper::~Minesweeper() {
+    delete main_widget;
+    // all other members are children of main_widget, except the following three
+    delete sgnmap_left;
+    delete sgnmap_middle;
+    delete sgnmap_right;
+
 }

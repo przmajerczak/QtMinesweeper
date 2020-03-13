@@ -15,8 +15,8 @@ class MswprButton : public QPushButton {
     Q_OBJECT
 
 public:
-
     MswprButton(QWidget* parent, int _x_id, int _y_id, bool is_bomb = false);
+    ~MswprButton();
     void setState(mswprBtn_state _stt);
     mswprBtn_state getState();
     int getX();
@@ -34,6 +34,7 @@ signals:
     void middleClicked();
     void rightClicked();
 private:
+    static int mswprbuttons_count;
     int id_x;
     int id_y;
     int neighbouring_bombs;
