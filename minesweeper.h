@@ -2,6 +2,7 @@
 #define MINESWEEPER_H
 
 #include "mswprbutton.h"
+#include "progressbar.h"
 
 #include <QMainWindow>
 #include <QFrame>
@@ -40,9 +41,11 @@ private:
     QHBoxLayout* box;
     QGridLayout* grid;
     QWidget* main_widget;
+    QWidget* progressbar_widget;
     QSignalMapper* sgnmap_left;
     QSignalMapper* sgnmap_middle;
     QSignalMapper* sgnmap_right;
+    ProgressBar* progressBar;
 
 
     bool isWon();

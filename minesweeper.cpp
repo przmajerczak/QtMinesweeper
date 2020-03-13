@@ -15,9 +15,9 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
     this->button_size = 30;     // to be set as settable parameter later
 
     grid = new QGridLayout();
-    box = new QHBoxLayout();
     main_layout = new QVBoxLayout();
     main_widget = new QWidget(this);
+    progressBar = new ProgressBar(this, button_size, bombs_left);
 
     // create board of fields
     board = QVector<QVector<QSharedPointer<MswprButton>>>();
@@ -52,57 +52,13 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
     connect(sgnmap_middle, SIGNAL(mapped(int)), this, SLOT(fieldMiddleClicked(int)));
     connect(sgnmap_right, SIGNAL(mapped(int)), this, SLOT(fieldRightClicked(int)));
 
-    QFontDatabase::addApplicationFont("digital-7-italic.ttf");
-    QFont font("Digital-7", button_size * 0.7);
-    left_label = new QLabel("BOMBS LEFT: " + QString::number(bombs_left), this);
-    right_label = new QLabel("PROGRESS: " + QString::number(qFloor(100 - (100 * (fields_left_uncovered - bombs_count) / (board_x_size * board_y_size - bombs_count)))) + "%", this);
-
-    left_label->setFont(font);
-    right_label->setFont(font);
-
-    right_label->setStyleSheet("QLabel {"
-                               "background-color: #1a1a1a;"
-                               "color: yellow;"
-                               "border-top-left-radius: 0%;"
-                               "border-top-right-radius: 4%;"
-                               "border-bottom-left-radius: 0%;"
-                               "border-bottom-right-radius: 4%;"
-                               "border-width: " + QString::number(button_size / 10) + "px;"
-                               "border-left-width: 0px;"
-                               "border-style: solid;"
-                               "border-color: black;"
-                               "}");
-    left_label->setStyleSheet("QLabel {"
-                              "background-color: #1a1a1a;"
-                              "color: yellow;"
-                              "border-top-left-radius: 4%;"
-                              "border-top-right-radius: 0%;"
-                              "border-bottom-left-radius: 4%;"
-                              "border-bottom-right-radius: 0%;"
-                              "border-width: " + QString::number(button_size / 10) + "px;"
-                              "border-right-width: 0px;"
-                              "border-style: solid;"
-                              "border-color: black;"
-                              "}");
-
-    left_label->setFixedHeight(button_size);
-    left_label->setMinimumWidth(1 + board_x_size * button_size / 2);
-    right_label->setFixedHeight(button_size);
-    right_label->setMinimumWidth(1 + board_x_size * button_size / 2);
-
-    //left_label->setFixedSize(1 + board_x_size * button_size / 2, button_size);
-    //right_label->setFixedSize(1 + board_x_size * button_size / 2, button_size);
-    right_label->setAlignment(Qt::AlignRight | Qt::AlignCenter);
-
     grid->setSpacing(0);
-    box->setSpacing(0);
-    box->addWidget(left_label, 0, Qt::AlignLeft);
-    box->addWidget(right_label, 0, Qt::AlignRight);
 
-    main_layout->addLayout(box);
+
+    main_layout->addWidget(progressBar);
     main_layout->addLayout(grid);
     main_layout->setSpacing(button_size / 10);
-    main_layout->setAlignment(grid, Qt::AlignCenter | Qt::AlignHCenter);
+    main_layout->setAlignment(grid, Qt::AlignCenter);
     main_widget->setLayout(main_layout);
     this->setStyleSheet("QMainWindow {background-color:dimgray;}");
 
@@ -110,7 +66,7 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
 
     connect(this, SIGNAL(resized()), this, SLOT(onResize()));
 
-
+//progressbar_widget->setStyleSheet("QWidget {background-color:blue;}");
     /*
 
     main_layout = new QVBoxLayout(main_widget);
@@ -125,7 +81,6 @@ Minesweeper::Minesweeper(QWidget* parent, int x_size, int y_size, int bombs_coun
     mainer_layout->addWidget(this);
     mainer_layout->setAlignment(this, Qt::AlignCenter);
     */
-
 }
 void Minesweeper::drawBombs(int _arg) {
     // create list of numbers from 0 to the number of fields
@@ -156,7 +111,6 @@ void Minesweeper::drawBombs(int _arg) {
         board_indexes.removeAt(random_index);
     }
 }
-
 void Minesweeper::fillWithNumbers() {
     // for each row
     for (auto row : board)
@@ -173,7 +127,6 @@ void Minesweeper::fillWithNumbers() {
                             // and increment they bomb counter
                             board.value(j).value(i)->increaseBombsCount();
 }
-
 void Minesweeper::fieldLeftClicked(int _arg) {
     if (!first_click_made){
         drawBombs(_arg);
@@ -257,7 +210,6 @@ void Minesweeper::fieldRightClicked(int _arg) {
         }
     }
 }
-
 void Minesweeper::onResize() {
 
     qDebug() << main_widget->geometry().width();
@@ -265,15 +217,12 @@ void Minesweeper::onResize() {
     //left_label->setFixedSize(1 + (main_widget->geometry().width() - 11) / 2, button_size);
     //right_label->setFixedSize(1 + (main_widget->geometry().width() - 11) / 2, button_size);
 }
-
 void Minesweeper::resizeEvent(QResizeEvent* event) {
     emit resized();
 }
-
 bool Minesweeper::isWon() {
     return fields_left_uncovered == bombs_count;
 }
-
 void Minesweeper::uncoverEmpty(int field_x, int field_y) {
 
     // click the field

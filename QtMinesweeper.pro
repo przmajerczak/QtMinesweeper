@@ -20,12 +20,14 @@ SOURCES += \
     mainwindow.cpp \
     minesweeper.cpp \
     mswprbutton.cpp \
+    progressbar.cpp \
     settings.cpp
 
 HEADERS += \
     mainwindow.h \
     minesweeper.h \
     mswprbutton.h \
+    progressbar.h \
     settings.h
 
 # Default rules for deployment.
