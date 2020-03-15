@@ -3,6 +3,7 @@
 
 #include <QPushButton>
 #include <QMouseEvent>
+#include <QGraphicsOpacityEffect>
 
 enum mswprBtn_state {
     empty,
@@ -25,7 +26,9 @@ public:
     bool isChecked() const;
     bool isCovered() const;
     static QIcon* checked_icon;
+    QGraphicsOpacityEffect* opacity_effect;
     void setSize(int _size);
+    void setOpacity(double _value);
 public slots:
     void mousePressEvent(QMouseEvent* event) override;
 signals:

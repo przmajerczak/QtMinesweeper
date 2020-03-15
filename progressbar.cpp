@@ -36,7 +36,7 @@ ProgressBar::ProgressBar(QWidget* parent, int _size, int _bombs_left) : QWidget(
 
     box = new QHBoxLayout();
     box->setContentsMargins(size * (1 - text_height_factor) / 2, 0, size * (1 - text_height_factor) / 2, 0);
-    box->setSpacing(0);
+    box->setSpacing(size);
     box->addWidget(left_label, 0, Qt::AlignLeft);
     box->addWidget(right_label, 0, Qt::AlignRight);
 

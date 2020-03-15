@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
-    Minesweeper mine(nullptr, 10, 8, 80/5, 35);
+    Minesweeper mine(nullptr, 3, 15, 45/5, 35);
     mine.show();
 
 

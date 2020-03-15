@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QtMath>
+#include <QGraphicsOpacityEffect>
 
 Minesweeper::Minesweeper(QWidget* parent, int _x_size, int _y_size, int _bombs_count, int _button_size) : QMainWindow(parent){
     this->board_x_size = _x_size;
@@ -11,6 +12,7 @@ Minesweeper::Minesweeper(QWidget* parent, int _x_size, int _y_size, int _bombs_c
     this->bombs_left = this->bombs_count = _bombs_count;
     this->fields_left_uncovered = board_x_size * board_y_size;
     this->first_click_made = false;
+    this->game_lost = false;
     this->button_size = _button_size;
 
     grid = new QGridLayout();
@@ -123,23 +125,44 @@ void Minesweeper::fieldLeftClicked(int _arg) {
     int field_x = _arg % board_x_size;
     QSharedPointer<MswprButton> field = board.value(field_y).value(field_x);
 
-    if (field->isCovered() && !field->isChecked()) {
+    if (field->isCovered() && !field->isChecked() && !game_lost) {
 
         if (field->getState() == empty) {
             uncoverEmpty(field_x, field_y);
         } else {
             field->clicked(Qt::LeftButton);
-            fields_left_uncovered--;
+            if (field->getState() != bomb)
+                fields_left_uncovered--;
         }
 
         if (field->getState() == bomb && !field->isChecked()) {
+            main_widget->setObjectName("main_widget");
+            main_widget->setStyleSheet("#main_widget { "
+                                   "background-image: url(\"explosion.jpg\");"
+                                   "background-position: center;"
+                                   "background-repeat: no-repeat;"
+                                   "}");
+
+            for (auto row : board)
+                for (auto elem : row)
+                    if (!(elem->getX() == field_x && elem->getY() == field_y)) {
+                            elem->setOpacity(0.3);
+                    }
+
+            game_lost = true;
+/*
             QMessageBox* msgbx = new QMessageBox(this);
             msgbx->setWindowTitle(":C");
             msgbx->setText("Bomba!");
-            msgbx->show();
+            msgbx->show();*/
         }
 
         if (this->isWon()) {
+            for (auto row : board)
+                for (auto elem : row)
+                    if (!(elem->getState() == bomb))
+                        elem->setOpacity(0.3);
+
             QMessageBox* msgbx = new QMessageBox(this);
             msgbx->setWindowTitle(":D");
             msgbx->setText("Wygrana!");
@@ -160,6 +183,7 @@ void Minesweeper::fieldMiddleClicked(int _arg) {
     int field_x = _arg % board_x_size;
     QSharedPointer<MswprButton> field = board.value(field_y).value(field_x);
 
+    if (!field->isChecked())
         for (int i = field_x - 1; i <= field_x + 1; ++i)
             for (int j = field_y - 1; j <= field_y + 1; ++j)
                 // if they exist
@@ -176,20 +200,13 @@ void Minesweeper::fieldRightClicked(int _arg) {
         int field_x = _arg % board_x_size;
         QSharedPointer<MswprButton> field = board.value(field_y).value(field_x);
 
-        if (field->isCovered()) {
+        if (field->isCovered() && !game_lost) {
             field->clicked(Qt::RightButton);
 
             if (field->isChecked())
                 bombs_left--;
             else
                 bombs_left++;
-
-            if (this->isWon()) {
-                QMessageBox* msgbx = new QMessageBox(this);
-                msgbx->setWindowTitle(":D");
-                msgbx->setText("Wygrana!");
-                msgbx->show();
-            }
 
             progress_bar->bombCounter(bombs_left);
         }

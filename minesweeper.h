@@ -29,6 +29,7 @@ private:
     int fields_left_uncovered;
     int button_size;
     bool first_click_made;
+    bool game_lost;
     QVector<QVector<QSharedPointer<MswprButton>>> board;
     QVBoxLayout* main_layout;
     QHBoxLayout* box;

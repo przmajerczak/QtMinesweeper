@@ -1,6 +1,7 @@
 #include "mswprbutton.h"
 
 #include <QDebug>
+#include <QGraphicsOpacityEffect>
 
 
 QIcon* MswprButton::checked_icon = new QIcon("checked_icon.svg");
@@ -76,4 +77,10 @@ bool MswprButton::isChecked() const {
 void MswprButton::setSize(int _size) {
     this->button_size = _size;
     this->setFixedSize(button_size, button_size);
+}
+void MswprButton::setOpacity(double _value) {
+    opacity_effect = new QGraphicsOpacityEffect();
+    opacity_effect->setOpacity(_value);
+    setGraphicsEffect(opacity_effect);
+    setAutoFillBackground(true);
 }
