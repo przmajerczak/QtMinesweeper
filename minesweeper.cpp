@@ -16,13 +16,13 @@ Minesweeper::Minesweeper(QWidget* parent, int _x_size, int _y_size, int _bombs_c
     grid = new QGridLayout();
     main_layout = new QVBoxLayout();
     main_widget = new QWidget(this);
-    progressBar = new ProgressBar(this, button_size, bombs_left);
+    progress_bar = new ProgressBar(this, button_size, bombs_left);
 
     boardInit();
 
     grid->setSpacing(0);
 
-    main_layout->addWidget(progressBar);
+    main_layout->addWidget(progress_bar);
     main_layout->addLayout(grid);
     main_layout->setSpacing(button_size / 10);
     main_layout->setAlignment(grid, Qt::AlignCenter);
@@ -146,7 +146,7 @@ void Minesweeper::fieldLeftClicked(int _arg) {
             msgbx->show();
         }
 
-        //PRZEROBIIIIIĆright_label->setText("PROGRESS: " + QString::number(qFloor(100 - (100 * (fields_left_uncovered - bombs_count) / (board_x_size * board_y_size - bombs_count)))) + "%");
+        progress_bar->progressCounter(qFloor(100 * double((board_x_size * board_y_size - fields_left_uncovered)) / (board_x_size * board_y_size - bombs_count)));
     }
 }
 void Minesweeper::fieldMiddleClicked(int _arg) {
@@ -191,7 +191,7 @@ void Minesweeper::fieldRightClicked(int _arg) {
                 msgbx->show();
             }
 
-            //PRZEROBIIIIIĆleft_label->setText("BOMBS LEFT: " + QString::number(bombs_left));
+            progress_bar->bombCounter(bombs_left);
         }
     }
 }
@@ -219,13 +219,4 @@ void Minesweeper::uncoverEmpty(int field_x, int field_y) {
                             if (!board.value(j).value(i)->isChecked())
                                 uncoverEmpty(i, j);
     }
-}
-
-Minesweeper::~Minesweeper() {
-    delete main_widget;
-    // all other members are children of main_widget, except the following three
-    delete sgnmap_left;
-    delete sgnmap_middle;
-    delete sgnmap_right;
-
 }

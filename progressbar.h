@@ -10,10 +10,10 @@ class ProgressBar : public QWidget
     Q_OBJECT
 public:
     ProgressBar(QWidget* parent, int _size, int _bombs_left);
-    ~ProgressBar();
+    void bombCounter(int _bombs);
+    void progressCounter(int _progress);
 public slots:
     void paintEvent(QPaintEvent *);
-    void bombsLeft(int _bombs);
 private:
     int size;
     QHBoxLayout* box;

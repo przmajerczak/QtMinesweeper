@@ -10,7 +10,7 @@ ProgressBar::ProgressBar(QWidget* parent, int _size, int _bombs_left) : QWidget(
     double text_height_factor = 0.5;
 
     left_label = new QLabel("BOMBS LEFT: " + QString::number(_bombs_left));
-    right_label = new QLabel("PROGRESS: iles%");
+    right_label = new QLabel("PROGRESS: 0%");
 
     QFontDatabase::addApplicationFont("digital-7-italic.ttf");
     font = new QFont("Digital-7", size * text_height_factor);
@@ -49,12 +49,9 @@ void ProgressBar::paintEvent(QPaintEvent *)
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
-void ProgressBar::bombsLeft(int _bombs) {
-
+void ProgressBar::bombCounter(int _bombs) {
+    left_label->setText("BOMBS LEFT: " + QString::number(_bombs));
 }
-ProgressBar::~ProgressBar() {
-    delete box;
-    delete font;
-    delete left_label;
-    delete right_label;
+void ProgressBar::progressCounter(int _progress) {
+    right_label->setText("PROGRESS: " + QString::number(_progress) + "%");
 }

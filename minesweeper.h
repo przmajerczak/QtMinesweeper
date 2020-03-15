@@ -16,7 +16,6 @@ class Minesweeper : public QMainWindow {
 
 public:
     Minesweeper(QWidget* parent, int _x_size, int _y_size, int _bombs_count, int _button_size);
-    ~Minesweeper();
 public slots:
     void fieldLeftClicked(int _arg);
     void fieldMiddleClicked(int _arg);
@@ -31,17 +30,14 @@ private:
     int button_size;
     bool first_click_made;
     QVector<QVector<QSharedPointer<MswprButton>>> board;
-    QLabel* left_label;
-    QLabel* right_label;
     QVBoxLayout* main_layout;
     QHBoxLayout* box;
     QGridLayout* grid;
     QWidget* main_widget;
-    QWidget* progressbar_widget;
     QSignalMapper* sgnmap_left;
     QSignalMapper* sgnmap_middle;
     QSignalMapper* sgnmap_right;
-    ProgressBar* progressBar;
+    ProgressBar* progress_bar;
 
 
     bool isWon();
