@@ -16,19 +16,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    main.cpp \
-    minesweeper.cpp \
-    mswprbutton.cpp \
-    progressbar.cpp \
-    settings.cpp \
-    singlegame.cpp
+    src/main.cpp \
+    src/minesweeper.cpp \
+    src/mswprbutton.cpp \
+    src/progressbar.cpp \
+    src/settings.cpp \
+    src/singlegame.cpp
 
 HEADERS += \
-    minesweeper.h \
-    mswprbutton.h \
-    progressbar.h \
-    settings.h \
-    singlegame.h
+    src/minesweeper.h \
+    src/mswprbutton.h \
+    src/progressbar.h \
+    src/settings.h \
+    src/singlegame.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
