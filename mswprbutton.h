@@ -26,7 +26,7 @@ public:
     bool isChecked() const;
     bool isCovered() const;
     static QIcon* checked_icon;
-    QGraphicsOpacityEffect* opacity_effect;
+
     void setSize(int _size);
     void setOpacity(double _value);
 public slots:
@@ -44,6 +44,7 @@ private:
     bool covered;
     mswprBtn_state state;
     QString text;
+    QGraphicsOpacityEffect* opacity_effect;
 };
 
 #endif // MSWPRBUTTON_H

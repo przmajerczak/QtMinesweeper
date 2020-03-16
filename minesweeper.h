@@ -3,6 +3,7 @@
 
 #include "mswprbutton.h"
 #include "progressbar.h"
+#include "singlegame.h"
 
 #include <QMainWindow>
 #include <QFrame>
@@ -16,36 +17,10 @@ class Minesweeper : public QMainWindow {
 
 public:
     Minesweeper(QWidget* parent, int _x_size, int _y_size, int _bombs_count, int _button_size);
-public slots:
-    void fieldLeftClicked(int _arg);
-    void fieldMiddleClicked(int _arg);
-    void fieldRightClicked(int _arg);
 private:
-    int dsf;
-    int board_x_size;
-    int board_y_size;
-    int bombs_left;
-    int bombs_count;
-    int fields_left_uncovered;
-    int button_size;
-    bool first_click_made;
-    bool game_lost;
-    QVector<QVector<QSharedPointer<MswprButton>>> board;
     QVBoxLayout* main_layout;
-    QHBoxLayout* box;
-    QGridLayout* grid;
     QWidget* main_widget;
-    QSignalMapper* sgnmap_left;
-    QSignalMapper* sgnmap_middle;
-    QSignalMapper* sgnmap_right;
     ProgressBar* progress_bar;
-
-
-    bool isWon();
-    void boardInit();
-    void drawBombs(int _arg);
-    void fillWithNumbers();
-    void uncoverEmpty(int field_x, int field_y);
 
 
 };

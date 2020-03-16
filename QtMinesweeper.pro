@@ -20,13 +20,15 @@ SOURCES += \
     minesweeper.cpp \
     mswprbutton.cpp \
     progressbar.cpp \
-    settings.cpp
+    settings.cpp \
+    singlegame.cpp
 
 HEADERS += \
     minesweeper.h \
     mswprbutton.h \
     progressbar.h \
-    settings.h
+    settings.h \
+    singlegame.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
