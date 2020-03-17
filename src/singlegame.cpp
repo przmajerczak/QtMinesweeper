@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QRandomGenerator>
 #include <QtMath>
+#include <QDebug>
 
 SingleGame::SingleGame(QWidget* parent, int _x_size, int _y_size, int _bombs_count, int _button_size, ProgressBar* _progress_bar) : QWidget(parent)
 {
@@ -21,9 +22,6 @@ SingleGame::SingleGame(QWidget* parent, int _x_size, int _y_size, int _bombs_cou
 
     grid->setSpacing(0);
     setLayout(grid);
-    this->setStyleSheet("QMainWindow {"
-                        "background-color:dimgray;"
-                        "}");
 
     connect(this, &SingleGame::signal_bombCounter, progress_bar, &ProgressBar::bombCounter);
     connect(this, &SingleGame::signal_progressCounter, progress_bar, &ProgressBar::progressCounter);
@@ -132,11 +130,12 @@ void SingleGame::fieldLeftClicked(int _arg) {
         if (field->getState() == bomb && !field->isChecked()) {
             this->setObjectName("main_widget");
             this->setStyleSheet("#main_widget { "
-                                   "background-image: url(\"explosion.jpg\");"
+                                   "background-image: url(\"res/explosion.jpg\");"
                                    "background-position: center;"
                                    "background-repeat: no-repeat;"
                                    "}");
 
+            emit signal_setResetButtonOpacity(1.0);
             for (auto row : board)
                 for (auto elem : row)
                     if (!(elem->getX() == field_x && elem->getY() == field_y)) {
@@ -144,11 +143,6 @@ void SingleGame::fieldLeftClicked(int _arg) {
                     }
 
             game_lost = true;
-/*
-            QMessageBox* msgbx = new QMessageBox(this);
-            msgbx->setWindowTitle(":C");
-            msgbx->setText("Bomba!");
-            msgbx->show();*/
         }
 
         if (this->isWon()) {
@@ -203,10 +197,10 @@ void SingleGame::fieldRightClicked(int _arg) {
             else
                 bombs_left++;
 
-            //progress_bar->bombCounter(bombs_left);
             emit signal_bombCounter(bombs_left);
         }
     }
+    qDebug() << "funckja od planszy";
 }
 bool SingleGame::isWon() {
     return fields_left_uncovered == bombs_count;

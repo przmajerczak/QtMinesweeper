@@ -86,7 +86,6 @@ void ProgressBar::setResetButtonOpacity(double _value) {
                                           "}");
 }
 void ProgressBar::resetGameSignalEmitter() {
-    setResetButtonOpacity(0.25);
     emit signal_resetGame();
 }
 
