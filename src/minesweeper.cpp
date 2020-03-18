@@ -17,12 +17,13 @@ Minesweeper::Minesweeper(QWidget* parent) : QMainWindow(parent){
 
     main_layout = new QVBoxLayout();
     main_widget = new QWidget(this);
-    progress_bar = new ProgressBar(this, (40 - button_size) / 2 + button_size, bombs_count);
+    progress_bar = new ProgressBar(this, 35/*(40 - button_size) / 2 + button_size*/, bombs_count);
     progress_bar->setResetButtonOpacity(0.25);
     settings = new SettingsWindow(this);
 
     main_layout->addWidget(progress_bar);
     main_layout->setSpacing(button_size / 10);
+    main_layout->setSizeConstraint(QLayout::SetFixedSize);
 
     setupMenuBar();
     resetGame();
@@ -55,7 +56,7 @@ void Minesweeper::resetGame() {
     main_layout->addWidget(single_game);
     main_layout->setAlignment(single_game, Qt::AlignCenter);
 
-    progress_bar->resetProgress(bombs_count);
+    progress_bar->resetProgress(bombs_count, 35);
     progress_bar->setResetButtonOpacity(0.25);
 }
 

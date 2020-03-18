@@ -7,7 +7,7 @@
 
 ProgressBar::ProgressBar(QWidget* parent, int _size, int _bombs_left) : QWidget(parent) {
     size = _size;
-    double text_height_factor = 0.5;
+    text_height_factor = 0.5;
 
     left_label = new QLabel("BOMBS LEFT: " + QString::number(_bombs_left));
     right_label = new QLabel("PROGRESS: 0%");
@@ -18,9 +18,6 @@ ProgressBar::ProgressBar(QWidget* parent, int _size, int _bombs_left) : QWidget(
 
     reset_icon = new QIcon("res/arrow.svg");
     reset_button->setIcon(*reset_icon);
-
-    left_label->setFont(*label_font);
-    right_label->setFont(*label_font);
 
     setFixedHeight(size);
     setStyleSheet("ProgressBar {"
@@ -34,7 +31,7 @@ ProgressBar::ProgressBar(QWidget* parent, int _size, int _bombs_left) : QWidget(
                                    "color: yellow;"
                                    "}"
                   "QPushButton {"
-                                    "background-color: yellow;"//#131313;"
+                                    "background-color: yellow;"
                                     "border-radius: 4%;"
                                     "border-width: " + QString::number(size / 20) + "px;"
                                     "border-style: solid;"
@@ -89,7 +86,42 @@ void ProgressBar::resetGameSignalEmitter() {
     emit signal_resetGame();
 }
 
-void ProgressBar::resetProgress(int _bombs_left) {
+void ProgressBar::resetProgress(int _bombs_left, int _size) {
+    resize(_size);
     left_label->setText("BOMBS LEFT: " + QString::number(_bombs_left));
     right_label->setText("PROGRESS: 0%");
+
+}
+void ProgressBar::resize(int _size) {
+    size = _size;
+    label_font->setPointSize(size * text_height_factor);
+    left_label->setFont(*label_font);
+    right_label->setFont(*label_font);
+    setFixedHeight(size);
+    setStyleSheet("ProgressBar {"
+                                       "background-color: #1a1a1a;"
+                                       "border-radius: 4%;"
+                                       "border-width: " + QString::number(size / 10) + "px;"
+                                       "border-style: solid;"
+                                       "border-color: black;"
+                                       "}"
+                      "QLabel {"
+                                       "color: yellow;"
+                                       "}"
+                      "QPushButton {"
+                                        "background-color: yellow;"
+                                        "border-radius: 4%;"
+                                        "border-width: " + QString::number(size / 20) + "px;"
+                                        "border-style: solid;"
+                                        "border-color: yellow;"
+                                        "border-top: none;"
+                                        "border-bottom: none;"
+                                        "}"
+                                          );
+    left_label->setFixedWidth(4.5 * size);
+    right_label->setFixedWidth(4.5 * size);
+    reset_button->setFixedSize(text_height_factor * size, text_height_factor * size);
+    reset_button->setIconSize(QSize(size, size));
+    box->setContentsMargins(size * (1 - text_height_factor) / 2, 0, size * (1 - text_height_factor) / 2, 0);
+    box->setSpacing(size);
 }

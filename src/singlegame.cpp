@@ -12,7 +12,7 @@ SingleGame::SingleGame(QWidget* parent, ProgressBar* _progress_bar, int _x_size,
     this->bombs_left = this->bombs_count = _bombs_count;
     this->fields_left_uncovered = board_x_size * board_y_size;
     this->first_click_made = false;
-    this->game_lost = false;
+    this->game_finished = false;
     this->button_size = _button_size;
     this->progress_bar = _progress_bar;
 
@@ -117,7 +117,7 @@ void SingleGame::fieldLeftClicked(int _arg) {
     int field_x = _arg % board_x_size;
     QSharedPointer<MswprButton> field = board.value(field_y).value(field_x);
 
-    if (field->isCovered() && !field->isChecked() && !game_lost) {
+    if (field->isCovered() && !field->isChecked() && !game_finished) {
 
         if (field->getState() == empty) {
             uncoverEmpty(field_x, field_y);
@@ -142,7 +142,7 @@ void SingleGame::fieldLeftClicked(int _arg) {
                             elem->setOpacity(0.3);
                     }
 
-            game_lost = true;
+            game_finished = true;
         }
 
         if (this->isWon()) {
@@ -151,6 +151,8 @@ void SingleGame::fieldLeftClicked(int _arg) {
                     if (!(elem->getState() == bomb))
                         elem->setOpacity(0.3);
             emit signal_setResetButtonOpacity(1.0);
+
+            game_finished = true;
 
             QMessageBox* msgbx = new QMessageBox(this);
             msgbx->setWindowTitle(":D");
@@ -189,7 +191,7 @@ void SingleGame::fieldRightClicked(int _arg) {
         int field_x = _arg % board_x_size;
         QSharedPointer<MswprButton> field = board.value(field_y).value(field_x);
 
-        if (field->isCovered() && !game_lost) {
+        if (field->isCovered() && !game_finished) {
             field->clicked(Qt::RightButton);
 
             if (field->isChecked())

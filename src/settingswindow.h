@@ -52,6 +52,7 @@ private:
     void setupButtonSize();
     void setupControlButtons();
     void readSettings();
+    void saveSettings();
 };
 
 #endif // SETTINGS_H

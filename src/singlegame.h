@@ -31,7 +31,7 @@ private:
     int fields_left_uncovered;
     int button_size;
     bool first_click_made;
-    bool game_lost;
+    bool game_finished;
     QVector<QVector<QSharedPointer<MswprButton>>> board;
     QGridLayout* grid;
     QSignalMapper* sgnmap_left;

@@ -16,6 +16,16 @@ SettingsWindow::SettingsWindow(QWidget* parent) : QDialog(parent)
     setupButtonSize();
     setupControlButtons();
 
+    this->setStyleSheet("QDialog {"
+                                                    "background-color: #acacac;"
+                                                "}"
+
+                        "QPushButton, QComboBox {"
+                                                    "background-color: #cacaca;"
+                                                "}"
+
+                        );
+
     this->setLayout(main_layout);
 }
 void SettingsWindow::setupBoardSize() {
@@ -153,12 +163,13 @@ void SettingsWindow::setupControlButtons() {
 
 void SettingsWindow::applyRestartSlot() {
     //zapis i sygnał do restartu i zamknięcie
+    saveSettings();
     emit restartSignal();
     this->close();
 }
 void SettingsWindow::applyLaterSlot() {
     //sam zapis do jsona i zamknięcie
-
+    saveSettings();
     this->close();
 }
 void SettingsWindow::updateBombLabels() {
@@ -187,18 +198,19 @@ void SettingsWindow::readSettings() {
 
     json_settings.close();
 }
-/*
+void SettingsWindow::saveSettings() {
+    QJsonObject json_obj;
 
-QJsonObject json_obj;
-json_obj["margin"] = 10;
-json_obj["bombs"] = 20;
-json_obj["background_color"] = "grey";
+    json_obj["x_size"] = x_size;
+    json_obj["y_size"] = y_size;
+    json_obj["bombs_count"] = bombs_count;
+    json_obj["button_size"] = button_size;
 
-QJsonDocument json_doc(json_obj);
+    QJsonDocument json_doc(json_obj);
 
-QFile jsonfile("config.json");
-jsonfile.open(QFile::WriteOnly);
-jsonfile.write(json_doc.toJson());
-jsonfile.close();
+    QFile jsonfile("res/settings.json");
 
-*/
+    jsonfile.open(QIODevice::WriteOnly | QIODevice::Text);
+    jsonfile.write(json_doc.toJson());
+    jsonfile.close();
+}
