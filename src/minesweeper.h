@@ -11,12 +11,14 @@
 #include <QLabel>
 #include <QSignalMapper>
 
+
+
 class Minesweeper : public QMainWindow {
 
     Q_OBJECT
 
 public:
-    Minesweeper(QWidget* parent, int _x_size, int _y_size, int _bombs_count, int _button_size);
+    Minesweeper(QWidget* parent);
 public slots:
     void resetGame();
 protected:
@@ -36,6 +38,7 @@ private:
     QWidget* main_widget;
     ProgressBar* progress_bar;
     SingleGame* single_game;
+    SettingsWindow* settings;
 
     QMenu* options_menu;
     QMenu* more_menu;
@@ -45,6 +48,7 @@ private:
     QAction* restart_action;
 
     void setupMenuBar();
+    void readSettings();
 
 
 

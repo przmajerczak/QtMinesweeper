@@ -5,7 +5,7 @@
 #include <QtMath>
 #include <QDebug>
 
-SingleGame::SingleGame(QWidget* parent, int _x_size, int _y_size, int _bombs_count, int _button_size, ProgressBar* _progress_bar) : QWidget(parent)
+SingleGame::SingleGame(QWidget* parent, ProgressBar* _progress_bar, int _x_size, int _y_size, int _bombs_count, int _button_size) : QWidget(parent)
 {
     this->board_x_size = _x_size;
     this->board_y_size = _y_size;

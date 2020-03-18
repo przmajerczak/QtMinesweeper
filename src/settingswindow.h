@@ -12,7 +12,13 @@ class SettingsWindow : public QDialog
 {
     Q_OBJECT
 public:
-    SettingsWindow(QWidget* parent, int _x_size, int _y_size, int _bombs_count, int _button_size);
+    SettingsWindow(QWidget* parent);
+signals:
+    void restartSignal();
+private slots:
+    void applyRestartSlot();
+    void applyLaterSlot();
+    void updateBombLabels();
 private:
     int x_size;
     int y_size;
@@ -45,6 +51,7 @@ private:
     void setupBombs();
     void setupButtonSize();
     void setupControlButtons();
+    void readSettings();
 };
 
 #endif // SETTINGS_H

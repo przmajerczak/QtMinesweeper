@@ -14,7 +14,7 @@ class SingleGame : public QWidget
 {
     Q_OBJECT
 public:
-    SingleGame(QWidget* parent, int _x_size, int _y_size, int _bombs_count, int _button_size, ProgressBar* _progress_bar);
+    SingleGame(QWidget* parent, ProgressBar* _progress_bar, int _x_size = 8, int _y_size = 8, int _bombs_count = 12, int _button_size = 35);
 signals:
     void signal_bombCounter(int _bombs);
     void signal_progressCounter(int _progress);

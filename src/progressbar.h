@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QWidget>
 
+
 class ProgressBar : public QWidget
 {
     Q_OBJECT

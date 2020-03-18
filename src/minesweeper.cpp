@@ -7,21 +7,22 @@
 #include <QGraphicsOpacityEffect>
 #include <QMenu>
 #include <QMenuBar>
+#include <QJsonDocument>
+#include <QJsonObject>
 
-Minesweeper::Minesweeper(QWidget* parent, int _x_size, int _y_size, int _bombs_count, int _button_size) : QMainWindow(parent){
-    this->x_size = _x_size;
-    this->y_size = _y_size;
-    this->bombs_count = _bombs_count;
-    this->button_size = _button_size;
+Minesweeper::Minesweeper(QWidget* parent) : QMainWindow(parent){
+    readSettings();
+
     this->single_game = nullptr;
 
     main_layout = new QVBoxLayout();
     main_widget = new QWidget(this);
-    progress_bar = new ProgressBar(this, (40 - _button_size) / 2 + _button_size, _bombs_count);
+    progress_bar = new ProgressBar(this, (40 - button_size) / 2 + button_size, bombs_count);
     progress_bar->setResetButtonOpacity(0.25);
+    settings = new SettingsWindow(this);
 
     main_layout->addWidget(progress_bar);
-    main_layout->setSpacing(_button_size / 10);
+    main_layout->setSpacing(button_size / 10);
 
     setupMenuBar();
     resetGame();
@@ -39,13 +40,17 @@ Minesweeper::Minesweeper(QWidget* parent, int _x_size, int _y_size, int _bombs_c
     this->setCentralWidget(main_widget);
 
     connect(progress_bar, &ProgressBar::signal_resetGame, this, &Minesweeper::resetGame);
+    connect(settings, &SettingsWindow::restartSignal, this, &Minesweeper::resetGame);
+
 }
 
 void Minesweeper::resetGame() {
     if (single_game != nullptr) {
         single_game->deleteLater();
     }
-    single_game = new SingleGame(this, x_size, y_size, bombs_count, button_size, progress_bar);
+
+    readSettings();
+    single_game = new SingleGame(this, progress_bar, x_size, y_size, bombs_count, button_size);
 
     main_layout->addWidget(single_game);
     main_layout->setAlignment(single_game, Qt::AlignCenter);
@@ -86,7 +91,29 @@ void Minesweeper::aboutSlot() {
     msgbx->exec();
 }
 void Minesweeper::settingsSlot() {
-    SettingsWindow settings(this, x_size, y_size, bombs_count, button_size);
-    settings.exec();
+
+
+    settings->exec();
+}
+void Minesweeper::readSettings() {
+    QFile json_settings("res/settings.json");
+
+    if (json_settings.open(QIODevice::ReadOnly | QIODevice::Text)) {
+       QJsonDocument json_doc(QJsonDocument::fromJson(json_settings.readAll()));
+
+       QJsonObject json_obj = json_doc.object();
+
+       x_size = json_obj["x_size"].toInt();
+       y_size = json_obj["y_size"].toInt();
+       bombs_count = json_obj["bombs_count"].toInt();
+       button_size = json_obj["button_size"].toInt();
+    } else {
+        x_size = 8;
+        y_size = 8;
+        bombs_count = 16;
+        button_size = 35;
+    }
+
+    json_settings.close();
 }
 
