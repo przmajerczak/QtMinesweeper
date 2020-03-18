@@ -2,7 +2,6 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QDebug>
 
 #include "minesweeper.h"
 
@@ -27,8 +26,11 @@ int main(int argc, char *argv[])
     }
     json_settings.close();
 
-    Minesweeper mine(nullptr, x_size, y_size, bombs_count, button_size);
-    mine.show();
+    //Minesweeper mine(nullptr, x_size, y_size, bombs_count, button_size);
+    //mine.show();
 
-    return a.exec();
+    SettingsWindow s(nullptr, x_size, y_size, bombs_count, button_size);
+    return s.exec();
+
+    //return a.exec();
 }

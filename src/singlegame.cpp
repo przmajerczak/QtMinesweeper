@@ -200,7 +200,6 @@ void SingleGame::fieldRightClicked(int _arg) {
             emit signal_bombCounter(bombs_left);
         }
     }
-    qDebug() << "funckja od planszy";
 }
 bool SingleGame::isWon() {
     return fields_left_uncovered == bombs_count;

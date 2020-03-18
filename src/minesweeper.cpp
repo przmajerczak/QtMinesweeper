@@ -82,11 +82,11 @@ void Minesweeper::setupMenuBar() {
 void Minesweeper::aboutSlot() {
     QMessageBox* msgbx = new QMessageBox(this);
     msgbx->setWindowTitle("About");
-    msgbx->setText("many many info");
+    msgbx->setText("many many infos");
     msgbx->exec();
 }
 void Minesweeper::settingsSlot() {
-    SettingsWindow settings(this);
+    SettingsWindow settings(this, x_size, y_size, bombs_count, button_size);
     settings.exec();
 }
 
