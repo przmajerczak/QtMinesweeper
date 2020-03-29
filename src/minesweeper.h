@@ -6,7 +6,6 @@
 #include "settingswindow.h"
 
 #include <QMainWindow>
-#include <QFrame>
 #include <QGridLayout>
 #include <QLabel>
 #include <QSignalMapper>
@@ -19,15 +18,20 @@ class Minesweeper : public QMainWindow {
 
 public:
     Minesweeper(QWidget* parent);
+
 public slots:
     void resetGame();
+
 protected:
 #ifndef QT_NO_CONTEXTMENU
     void contextMenuEvent(QContextMenuEvent* event) override;
 #endif // QT_NO_CONTEXTMENU
+
 private slots:
     void settingsSlot(void);
     void aboutSlot(void);
+    void setBackground(bool _victory);
+
 private:
     int x_size;
     int y_size;
@@ -49,10 +53,6 @@ private:
 
     void setupMenuBar();
     void readSettings();
-
-
-
-
 };
 
 #endif // MINESWEEPER_H

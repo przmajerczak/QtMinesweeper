@@ -1,7 +1,4 @@
 #include <QApplication>
-#include <QFile>
-#include <QJsonDocument>
-#include <QJsonObject>
 
 #include "minesweeper.h"
 

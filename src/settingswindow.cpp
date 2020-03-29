@@ -1,6 +1,5 @@
 #include "settingswindow.h"
 
-#include <QDebug>
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -162,13 +161,11 @@ void SettingsWindow::setupControlButtons() {
 }
 
 void SettingsWindow::applyRestartSlot() {
-    //zapis i sygnał do restartu i zamknięcie
     saveSettings();
     emit restartSignal();
     this->close();
 }
 void SettingsWindow::applyLaterSlot() {
-    //sam zapis do jsona i zamknięcie
     saveSettings();
     this->close();
 }
@@ -190,9 +187,9 @@ void SettingsWindow::readSettings() {
        bombs_count = json_obj["bombs_count"].toInt();
        button_size = json_obj["button_size"].toInt();
     } else {
-        x_size = 8;
-        y_size = 8;
-        bombs_count = 16;
+        x_size = 10;
+        y_size = 7;
+        bombs_count = 10;
         button_size = 35;
     }
 

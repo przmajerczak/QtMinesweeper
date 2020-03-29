@@ -14,18 +14,22 @@ class ProgressBar : public QWidget
 public:
     ProgressBar(QWidget* parent, int _size, int _bombs_left);
     void resize(int _size);
+
 public slots:
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
     void bombCounter(int _bombs);
     void progressCounter(int _progress);
     void setResetButtonOpacity(double _value);
     void resetProgress(int _bombs_left, int _size);
+
 signals:
     void signal_resetGame();
+
 private slots:
     void resetGameSignalEmitter();
+
 private:
-    int size;
+    int vertical_size;
     double text_height_factor;
     QHBoxLayout* box;
     QFont* label_font;
@@ -34,6 +38,6 @@ private:
     QPushButton* reset_button;
     QIcon* reset_icon;
     QGraphicsOpacityEffect* opacity_effect;
-    };
+};
 
 #endif // PROGRESSBAR_H

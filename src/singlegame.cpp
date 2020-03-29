@@ -1,9 +1,7 @@
 #include "singlegame.h"
 
-#include <QMessageBox>
 #include <QRandomGenerator>
 #include <QtMath>
-#include <QDebug>
 
 SingleGame::SingleGame(QWidget* parent, ProgressBar* _progress_bar, int _x_size, int _y_size, int _bombs_count, int _button_size) : QWidget(parent)
 {
@@ -128,13 +126,7 @@ void SingleGame::fieldLeftClicked(int _arg) {
         }
 
         if (field->getState() == bomb && !field->isChecked()) {
-            this->setObjectName("main_widget");
-            this->setStyleSheet("#main_widget { "
-                                   "background-image: url(\"res/explosion.jpg\");"
-                                   "background-position: center;"
-                                   "background-repeat: no-repeat;"
-                                   "}");
-
+            emit signal_setBackground(false);
             emit signal_setResetButtonOpacity(1.0);
             for (auto row : board)
                 for (auto elem : row)
@@ -151,13 +143,9 @@ void SingleGame::fieldLeftClicked(int _arg) {
                     if (!(elem->getState() == bomb))
                         elem->setOpacity(0.3);
             emit signal_setResetButtonOpacity(1.0);
+            emit signal_setBackground(true);
 
             game_finished = true;
-
-            QMessageBox* msgbx = new QMessageBox(this);
-            msgbx->setWindowTitle(":D");
-            msgbx->setText("Wygrana!");
-            msgbx->show();
         }
 
         emit signal_progressCounter(qFloor(100 * double((board_x_size * board_y_size - fields_left_uncovered)) / (board_x_size * board_y_size - bombs_count)));

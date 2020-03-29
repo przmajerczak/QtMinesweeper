@@ -1,12 +1,10 @@
 #include "progressbar.h"
-
 #include <QFontDatabase>
 #include <QPainter>
 #include <QStyleOption>
-#include <QDebug>
 
 ProgressBar::ProgressBar(QWidget* parent, int _size, int _bombs_left) : QWidget(parent) {
-    size = _size;
+    vertical_size = _size;
     text_height_factor = 0.5;
 
     left_label = new QLabel("BOMBS LEFT: " + QString::number(_bombs_left));
@@ -14,16 +12,16 @@ ProgressBar::ProgressBar(QWidget* parent, int _size, int _bombs_left) : QWidget(
     reset_button = new QPushButton(this);
 
     QFontDatabase::addApplicationFont("res/digital-7-italic.ttf");
-    label_font = new QFont("Digital-7", size * text_height_factor);
+    label_font = new QFont("Digital-7", vertical_size * text_height_factor);
 
     reset_icon = new QIcon("res/arrow.svg");
     reset_button->setIcon(*reset_icon);
 
-    setFixedHeight(size);
+    setFixedHeight(vertical_size);
     setStyleSheet("ProgressBar {"
                                    "background-color: #1a1a1a;"
                                    "border-radius: 4%;"
-                                   "border-width: " + QString::number(size / 10) + "px;"
+                                   "border-width: " + QString::number(vertical_size / 10) + "px;"
                                    "border-style: solid;"
                                    "border-color: black;"
                                    "}"
@@ -33,7 +31,7 @@ ProgressBar::ProgressBar(QWidget* parent, int _size, int _bombs_left) : QWidget(
                   "QPushButton {"
                                     "background-color: yellow;"
                                     "border-radius: 4%;"
-                                    "border-width: " + QString::number(size / 20) + "px;"
+                                    "border-width: " + QString::number(vertical_size / 20) + "px;"
                                     "border-style: solid;"
                                     "border-color: yellow;"
                                     "border-top: none;"
@@ -44,14 +42,14 @@ ProgressBar::ProgressBar(QWidget* parent, int _size, int _bombs_left) : QWidget(
     left_label->setAlignment(Qt::AlignVCenter);
     right_label->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
 
-    left_label->setFixedWidth(4.5 * size);
-    right_label->setFixedWidth(4.5 * size);
-    reset_button->setFixedSize(text_height_factor * size, text_height_factor * size);
-    reset_button->setIconSize(QSize(size, size));
+    left_label->setFixedWidth(4.5 * vertical_size);
+    right_label->setFixedWidth(4.5 * vertical_size);
+    reset_button->setFixedSize(text_height_factor * vertical_size, text_height_factor * vertical_size);
+    reset_button->setIconSize(QSize(vertical_size, vertical_size));
 
     box = new QHBoxLayout();
-    box->setContentsMargins(size * (1 - text_height_factor) / 2, 0, size * (1 - text_height_factor) / 2, 0);
-    box->setSpacing(size);
+    box->setContentsMargins(vertical_size * (1 - text_height_factor) / 2, 0, vertical_size * (1 - text_height_factor) / 2, 0);
+    box->setSpacing(vertical_size);
     box->addWidget(left_label, 0, Qt::AlignLeft);
     box->addWidget(reset_button, 0, Qt::AlignCenter);
     box->addWidget(right_label, 0, Qt::AlignRight);
@@ -93,15 +91,15 @@ void ProgressBar::resetProgress(int _bombs_left, int _size) {
 
 }
 void ProgressBar::resize(int _size) {
-    size = _size;
-    label_font->setPointSize(size * text_height_factor);
+    vertical_size = _size;
+    label_font->setPointSize(vertical_size * text_height_factor);
     left_label->setFont(*label_font);
     right_label->setFont(*label_font);
-    setFixedHeight(size);
+    setFixedHeight(vertical_size);
     setStyleSheet("ProgressBar {"
                                        "background-color: #1a1a1a;"
                                        "border-radius: 4%;"
-                                       "border-width: " + QString::number(size / 10) + "px;"
+                                       "border-width: " + QString::number(vertical_size / 10) + "px;"
                                        "border-style: solid;"
                                        "border-color: black;"
                                        "}"
@@ -111,17 +109,17 @@ void ProgressBar::resize(int _size) {
                       "QPushButton {"
                                         "background-color: yellow;"
                                         "border-radius: 4%;"
-                                        "border-width: " + QString::number(size / 20) + "px;"
+                                        "border-width: " + QString::number(vertical_size / 20) + "px;"
                                         "border-style: solid;"
                                         "border-color: yellow;"
                                         "border-top: none;"
                                         "border-bottom: none;"
                                         "}"
                                           );
-    left_label->setFixedWidth(4.5 * size);
-    right_label->setFixedWidth(4.5 * size);
-    reset_button->setFixedSize(text_height_factor * size, text_height_factor * size);
-    reset_button->setIconSize(QSize(size, size));
-    box->setContentsMargins(size * (1 - text_height_factor) / 2, 0, size * (1 - text_height_factor) / 2, 0);
-    box->setSpacing(size);
+    left_label->setFixedWidth(4.5 * vertical_size);
+    right_label->setFixedWidth(4.5 * vertical_size);
+    reset_button->setFixedSize(text_height_factor * vertical_size, text_height_factor * vertical_size);
+    reset_button->setIconSize(QSize(vertical_size, vertical_size));
+    box->setContentsMargins(vertical_size * (1 - text_height_factor) / 2, 0, vertical_size * (1 - text_height_factor) / 2, 0);
+    box->setSpacing(vertical_size);
 }

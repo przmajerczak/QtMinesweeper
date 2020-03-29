@@ -1,6 +1,6 @@
 {
-    "bombs_count": 46,
-    "button_size": 15,
-    "x_size": 11,
-    "y_size": 5
+    "bombs_count": 10,
+    "button_size": 35,
+    "x_size": 10,
+    "y_size": 7
 }

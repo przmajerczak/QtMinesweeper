@@ -3,7 +3,7 @@
 
 #include <QComboBox>
 #include <QGroupBox>
-#include <QHBoxLayout>
+#include <QBoxLayout>
 #include <QDialog>
 #include <QLabel>
 #include <QPushButton>
@@ -11,14 +11,18 @@
 class SettingsWindow : public QDialog
 {
     Q_OBJECT
+
 public:
     SettingsWindow(QWidget* parent);
+
 signals:
     void restartSignal();
+
 private slots:
     void applyRestartSlot();
     void applyLaterSlot();
     void updateBombLabels();
+
 private:
     int x_size;
     int y_size;
