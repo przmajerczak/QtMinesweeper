@@ -95,7 +95,7 @@ void Minesweeper::aboutSlot() {
                          "}");
     msgbx->setText("<p align=center>"
                    "<h1>QtMinesweeper</h1>"
-                   "<h3>Written in march 2020 <br/>by Przemysław Majerczak (<a href=\"mailto:przmajerczak@gmail.com\">przmajerczak@gmail.com</a>)</h3>"
+                   "<h3>Written in march 2020 <br/>by Przemysław Majerczak (<a href=\"https://github.com/przmajerczak\">github.com/przmajerczak</a>)</h3>"
 
                    "<table>"
                    "<th><h4>Sources of elements used:</h4></th>"
